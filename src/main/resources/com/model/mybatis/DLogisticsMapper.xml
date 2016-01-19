@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.trade.LogisticsDao">
+
+    <resultMap type="DLogistics" id="standardLogisticsMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="company" column="company" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="serialno" column="serialno" javaType="String" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<sql id="logistics_columns">
+		id, company, serialno
+	</sql>
+	
+	<select id="getById" resultMap="standardLogisticsMap" parameterType="string" >
+		SELECT <include refid="logistics_columns"/> from f_logistics g where g.id = #{id}
+	</select>
+	
+	
+</mapper>

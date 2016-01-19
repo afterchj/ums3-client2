@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.CateItemDao">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true"> 
+        <property name="timeToIdleSeconds" value="30"/><!--30s-->
+        <property name="timeToLiveSeconds" value="60"/><!--60s-->
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache>
+	<resultMap type="CateItem" id="CateItemMap">
+		<id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="value" column="value" javaType="String" jdbcType="VARCHAR"/>
+		<result property="icon" column="icon" javaType="String" jdbcType="VARCHAR"/>
+		<result property="description" column="description" javaType="String" jdbcType="VARCHAR"/>
+		<result property="dtype" column="dtype" javaType="String" jdbcType="VARCHAR"/>
+		<association property="parent" column="parent_id" select="get"></association>		
+	</resultMap>
+
+	<select id="get" resultMap="CateItemMap" parameterType="string">
+		select * from f_category cate where cate.id = #{id}
+	</select>
+	
+	<select id="getCategoryByTheme" resultMap="CateItemMap">
+		select * from f_category cate left join f_category_file fcf on cate.id = fcf.category_id  where fcf.file_id = #{themeId} and cate.dtype = 'category'  
+	</select>
+	
+	<select id="getCategoryInfoByCategoryAndLang" resultMap="CateItemMap">
+		select * from f_category cateinfo where cateinfo.parent_id = #{categoryId} and cateinfo.description = #{lang} and cateinfo.dtype='cateinfo' 
+	</select>
+	
+	<select id="getAll" resultMap="CateItemMap" parameterType="string">
+		select * from f_category c where c.dtype=#{type} and c.value is not null order by c.value asc
+	</select>
+	
+
+</mapper>

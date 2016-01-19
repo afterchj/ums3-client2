@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.ThemeFileDao">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true"> 
+        <property name="timeToIdleSeconds" value="30"/><!--30s-->
+        <property name="timeToLiveSeconds" value="60"/><!--60s-->
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache>
+	<resultMap type="ThemeFile" id="standardThemeFileMap">
+		<id property="id" column="id" javaType="Long" jdbcType="INTEGER" />
+		<result property="name" column="name" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="title" column="title" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="uxSize" column="ux_size" javaType="Long"
+			jdbcType="INTEGER" />
+		<result property="apkSize" column="apk_size" javaType="Long"
+			jdbcType="INTEGER" />
+		<result property="price" column="price" javaType="BigDecimal"
+			jdbcType="DECIMAL" />
+		<result property="uxHvga" column="ux_h_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="uxWvga" column="ux_w_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="apkPath" column="apk_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="uxPath" column="ux_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="dtype" column="dtype" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="marketURL" column="market_url" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="version" column="version" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="iconPath" column="icon_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="adPath" column="ad_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="preWebPath" column="pre_web_path" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="preClientPath" column="pre_client_path"
+			javaType="String" jdbcType="VARCHAR" />
+		<result property="createTime" column="create_time" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="modifyTime" column="modify_time" javaType="String"
+			jdbcType="VARCHAR" />
+		<result property="ishot" column="is_hot" javaType="Long"
+			jdbcType="INTEGER" />
+		<result property="isnew" column="is_new" javaType="Long"
+			jdbcType="INTEGER" />
+		<result property="percent" column="percent" javaType="Long" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<select id="getThemeFile" resultMap="standardThemeFileMap">
+		SELECT * FROM f_file f WHERE f.id = #{id}
+	</select>
+</mapper>

@@ -1,0 +1,163 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1, maximum-scale=1">
+<title>专题详情</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+<style>
+.ads_bar{
+	text-align:center;
+}
+.ads_bar img{
+	width:95%;
+}
+</style>
+</head>
+
+<body class="BorderImage">
+	<div class="ads">
+    	<div class="ads_bar">
+			<img id="topicImg" src="" >
+            <p id="word"></p>
+        </div>	
+    </div>
+    <div class="container_hot">
+        <div class="wrapper">
+          	<div id="start" class="ui-refresh-up">
+                <span id = "Sicon" class="ui-refresh-icon"></span>              
+                <span id = "Stitle" class="ui-refresh-label">加载更多</span>
+            </div>    
+        </div>
+    
+    </div>
+	<div style="height:5%;width:100%"></div>
+</body>
+
+
+<script>
+var cw;
+var loading = 0;
+var number = 0;
+var loadingMore = 0;
+var page = 1;
+var tid=0;//当前页面cid
+var data={"topic":{"id":19,"name":"小清新专题","value":null,"description":"那些年，我们一起追的“小清新”\r\n","icon":"category/f8a31d1233a1492db71e0cb1cbf9d04e.jpg","sort":1,"topicFileLinkList":[]},"fileStoreInfos":[{"id":"2611","title":"风铃","shortDescription":"伴随着风送去我的祝福","longDescription":"远方的他在做什么呢？是否一切安好？滑动风铃，伴随着一阵风，将我的祝福送给远方的他。","author":"Whosure","price":0,"language":"ZH","fiId":1185,"theme":{"id":"428","name":"风铃","title":"风铃","uxSize":2761441,"apkSize":5275433,"price":0.0,"uxHvga":"7ba6f3bd98e34e37a707d8760bff6c1e/fengling_h.ux","uxWvga":"7ba6f3bd98e34e37a707d8760bff6c1e/fengling_w.ux","apkPath":"7ba6f3bd98e34e37a707d8760bff6c1e/fengling.apk","uxPath":null,"dtype":"0","marketURL":"com.fengling","version":"1","iconPath":"7ba6f3bd98e34e37a707d8760bff6c1e/icon_fengling.jpg","adPath":null,"preWebPath":"7ba6f3bd98e34e37a707d8760bff6c1e/pre_web_fengling.jpg","preClientPath":"7ba6f3bd98e34e37a707d8760bff6c1e/pre_client_fengling.jpg","createTime":"2013-05-29 11:26:31","modifyTime":"2013-07-19 13:24:58","downloadURL":null,"totalDownload":null,"ishot":1,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3756","title":"清新小萌主","shortDescription":"恋物是一种哲理和信仰","longDescription":"小清新，小世界。谢谢你们，陪我走过每个记忆。我是恋物控，我就要这种feel~","author":"Linda","price":0,"language":"ZH","fiId":1580,"theme":{"id":"601","name":"清新小萌主","title":"清新小盟主","uxSize":1588184,"apkSize":2133135,"price":0.0,"uxHvga":null,"uxWvga":"80c484f09353444a9656401d1889eeaf/qingxinxiaomengzhu_w.ux","apkPath":"80c484f09353444a9656401d1889eeaf/qingxinxiaomengzhu.apk","uxPath":null,"dtype":"0","marketURL":"com.qingxinxiaomengzhu","version":"1","iconPath":"80c484f09353444a9656401d1889eeaf/icon_qingxinxmz.jpg","adPath":null,"preWebPath":"80c484f09353444a9656401d1889eeaf/pre_web_qingxinxmz.jpg","preClientPath":"80c484f09353444a9656401d1889eeaf/pre_client_qingxinxmz.jpg","createTime":"2013-11-13 16:24:04","modifyTime":"2013-11-19 10:30:34","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3974","title":"快乐小希","shortDescription":"小希，喜欢你，没道理！","longDescription":"喜欢你的呆萌，喜欢你的温柔，更喜欢你眯着眼睛冲我笑的样子。小希，你就是我的治愈系女神啊，就是喜欢你，我的快乐小希！","author":"Daisy","price":0,"language":"ZH","fiId":1779,"theme":{"id":"700","name":"快乐小希","title":"快乐小希","uxSize":440416,"apkSize":1081786,"price":0.0,"uxHvga":null,"uxWvga":"acd1634b28cc4160b93456030d019ef6/kuailexiaoxi_w.ux","apkPath":"acd1634b28cc4160b93456030d019ef6/kuailexiaoxi.apk","uxPath":null,"dtype":"0","marketURL":"com.kuailexiaoxi","version":"1","iconPath":"acd1634b28cc4160b93456030d019ef6/icon_kuailexiaoxi.jpg","adPath":null,"preWebPath":"acd1634b28cc4160b93456030d019ef6/pre_web_kuailexiaoxi.jpg","preClientPath":"acd1634b28cc4160b93456030d019ef6/pre_client_kuailexiaoxi.jpg","createTime":"2014-04-04 18:49:16","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":1,"percent":1},"store":null,"offset":null},{"id":"3951","title":"个性主张","shortDescription":"我叫怂，我已经在江湖上流传很久了……","longDescription":"学校禁止谈恋爱，但是我们班有两个同学仍然偷偷摸摸的谈，被班主任发现之后，叫来双方家长。班主任本来是想让家长说说自己的孩子。结果家长聊了聊发现对方家庭情况都还不错，就订婚，订婚了……","author":"Ava","price":0,"language":"ZH","fiId":1761,"theme":{"id":"682","name":"个性主张","title":"个性主张","uxSize":407821,"apkSize":863747,"price":0.0,"uxHvga":null,"uxWvga":"160029982fa44a0298dcf896da8a1b8c/gexingzhuzhang_w.ux","apkPath":"160029982fa44a0298dcf896da8a1b8c/gexingzhuzhang.apk","uxPath":null,"dtype":"0","marketURL":"com.gexingzhuzhang","version":"1","iconPath":"160029982fa44a0298dcf896da8a1b8c/icon_gexingzhuzhang.jpg","adPath":null,"preWebPath":"160029982fa44a0298dcf896da8a1b8c/pre_web_gexingzhuzhang.jpg","preClientPath":"160029982fa44a0298dcf896da8a1b8c/pre_client_ggexingzhuzhang.jpg","createTime":"2014-03-06 11:48:56","modifyTime":"2014-03-06 11:50:58","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3946","title":"绿意浓浓","shortDescription":"春天的气息扑鼻而来！","longDescription":"披着柔媚的春光，让略带甜意的风，从身边掠过。就会领悟到春的气息里，其实包含着一种最令人感动的柔情。绿意浓浓的春天是让人陶醉的！","author":"Rita","price":0,"language":"ZH","fiId":1760,"theme":{"id":"681","name":"绿意浓浓","title":"绿意浓浓","uxSize":327112,"apkSize":908794,"price":0.0,"uxHvga":null,"uxWvga":"70d65424c32e4a148721a7a910eb8137/lvyinongnong_w.ux","apkPath":"70d65424c32e4a148721a7a910eb8137/lvyinongnong.apk","uxPath":null,"dtype":"0","marketURL":"com.lvyinongnong","version":"1","iconPath":"70d65424c32e4a148721a7a910eb8137/icon_lvyinongnong.jpg","adPath":null,"preWebPath":"70d65424c32e4a148721a7a910eb8137/pre_web_lvyinongnong.jpg","preClientPath":"70d65424c32e4a148721a7a910eb8137/pre_client_lvyinongnong.jpg","createTime":"2014-03-06 11:43:08","modifyTime":"2014-03-06 11:51:05","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3778","title":"唯美水滴","shortDescription":"让我们遐想的水滴","longDescription":"被水洗刷过朦胧的橱窗，水滴似动非动的样子，像极了我们似哭非哭的心情，这一刻我们的心完全被它占据。","author":"Daisy","price":0,"language":"ZH","fiId":1583,"theme":{"id":"602","name":"唯美水滴","title":"唯美水滴","uxSize":620307,"apkSize":1241328,"price":0.0,"uxHvga":null,"uxWvga":"031fed40339b4482bca8041bd88c018c/weimeishuidi_w.ux","apkPath":"031fed40339b4482bca8041bd88c018c/weimeishuidi.apk","uxPath":null,"dtype":"0","marketURL":"com.weimeishuidi","version":"1","iconPath":"031fed40339b4482bca8041bd88c018c/icon_weimeishuidi.jpg","adPath":null,"preWebPath":"031fed40339b4482bca8041bd88c018c/pre_web_weimeishuidi.jpg","preClientPath":"031fed40339b4482bca8041bd88c018c/pre_client_weimeishuidi.jpg","createTime":"2013-11-13 16:29:32","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"2437","title":"听海","shortDescription":"聆听海蓝色的忧郁旋律！","longDescription":"听海哭的声音，叹惜着谁又被伤了心，却还不清醒。一定不是我，至少我很冷静，可是泪水就连泪水也都不相信……","author":"Rita","price":0,"language":"ZH","fiId":1020,"theme":{"id":"373","name":"听海","title":"听海","uxSize":1829178,"apkSize":2437184,"price":0.0,"uxHvga":null,"uxWvga":"ae08cc12b00444fc8fffd43cca0acfe9/tinghai_w.ux","apkPath":"ae08cc12b00444fc8fffd43cca0acfe9/tinghai.apk","uxPath":null,"dtype":"0","marketURL":"com.tinghai","version":"1","iconPath":"ae08cc12b00444fc8fffd43cca0acfe9/icon_tinghai.jpg","adPath":null,"preWebPath":"ae08cc12b00444fc8fffd43cca0acfe9/pre_web_tinghai.jpg","preClientPath":"ae08cc12b00444fc8fffd43cca0acfe9/pre_client_tinghai.jpg","createTime":"2013-04-22 17:27:37","modifyTime":"2013-06-06 13:20:59","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3796","title":"盒子先生","shortDescription":"和Danbo一起进入童话世界","longDescription":"Danbo是个纯真善良的小家伙，在它单纯的幻想世界里，总是透露出最可爱的动人气息。","author":"Andy","price":0,"language":"ZH","fiId":1610,"theme":{"id":"611","name":"盒子先生","title":"盒子先生","uxSize":1219151,"apkSize":1801418,"price":0.0,"uxHvga":null,"uxWvga":"2fba3b72e0114b4488a2e0a3b7a63ac4/hezixiansheng_w.ux","apkPath":"2fba3b72e0114b4488a2e0a3b7a63ac4/hezixiansheng.apk","uxPath":null,"dtype":"0","marketURL":"com.hezixiansheng","version":"1","iconPath":"2fba3b72e0114b4488a2e0a3b7a63ac4/icon_hzxs.jpg","adPath":null,"preWebPath":"2fba3b72e0114b4488a2e0a3b7a63ac4/pre_web_hzxs.jpg","preClientPath":"2fba3b72e0114b4488a2e0a3b7a63ac4/pre_client_hzxs.jpg","createTime":"2013-11-29 15:13:05","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3572","title":"恋空","shortDescription":"天空澄碧，纤云不染","longDescription":"湛蓝的天空透露可爱的碧绿，片片的白云像大海里浮动的白帆，遥望天空，你或喜或悲？","author":"Rita","price":0,"language":"ZH","fiId":1409,"theme":{"id":"506","name":"恋空","title":"恋空","uxSize":1105823,"apkSize":1636929,"price":0.0,"uxHvga":null,"uxWvga":"cc8da8f110d7415f8a97fd4507319549/liankong_w.ux","apkPath":"cc8da8f110d7415f8a97fd4507319549/liankong.apk","uxPath":null,"dtype":"0","marketURL":"com.liankong","version":"1","iconPath":"cc8da8f110d7415f8a97fd4507319549/icon_liankong.jpg","adPath":null,"preWebPath":"cc8da8f110d7415f8a97fd4507319549/pre_web_liankong.jpg","preClientPath":"cc8da8f110d7415f8a97fd4507319549/pre_client_liankong.jpg","createTime":"2013-07-15 14:54:01","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"2344","title":"一米阳光","shortDescription":"一米阳光照亮你的世界","longDescription":"嫩绿的小芽，暖暖的阳光，湛蓝的湖水构成了清新的画面，这种小清新永远都是小文艺的梦……","author":"Daisy","price":0,"language":"ZH","fiId":930,"theme":{"id":"343","name":"一米阳光","title":"一米阳光","uxSize":756128,"apkSize":1318008,"price":0.0,"uxHvga":null,"uxWvga":"16a4155d341d401d8c2d56d8b3f6a646/yimiyangguang_w.ux","apkPath":"16a4155d341d401d8c2d56d8b3f6a646/yimiyangguang.apk","uxPath":null,"dtype":"0","marketURL":"com.yimiyangguang","version":"1","iconPath":"16a4155d341d401d8c2d56d8b3f6a646/icon_yimiyangguang.jpg","adPath":null,"preWebPath":"16a4155d341d401d8c2d56d8b3f6a646/pre_web_yimiyangguang.jpg","preClientPath":"16a4155d341d401d8c2d56d8b3f6a646/pre_client_yimiyangguang.jpg","createTime":"2013-04-02 09:44:05","modifyTime":"2013-05-28 16:00:15","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3995","title":"简单爱","shortDescription":"牵着你的手永远不放开","longDescription":"说不上为什么\r\n我变得很主动\r\n若爱上一个人\r\n什么都会值得去做\r\n我想大声宣布\r\n对你依依不舍\r\n我想就这样牵着你的手不放开\r\n爱可不可以简简单单没有伤害\r\n轻轻滑动任意一方，赶紧抓牢恋人的小手。当他们相拥的那一瞬间……","author":"Chou","price":null,"language":"ZH","fiId":91,"theme":{"id":"52","name":"简单爱","title":"简单爱","uxSize":0,"apkSize":0,"price":0.0,"uxHvga":"386786385aae41aebd3b47e0b83c5941/jiandanai_h.ux","uxWvga":"386786385aae41aebd3b47e0b83c5941/jiandanai_w.ux","apkPath":"386786385aae41aebd3b47e0b83c5941/jiandanai.apk","uxPath":"","dtype":"0","marketURL":"com.tpad.change.unlock.jian3dan1ai4","version":"9","iconPath":"386786385aae41aebd3b47e0b83c5941/icon_jiandanai.jpg","adPath":"9523d54195554afb806ff49d8fce3683/ad_jiandanai.jpg","preWebPath":"386786385aae41aebd3b47e0b83c5941/pre_web_jiandanai.jpg","preClientPath":"386786385aae41aebd3b47e0b83c5941/pre_client_luoli.jpg","createTime":"2012-05-30 15:15:02","modifyTime":"2014-05-07 17:22:18","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3785","title":"下午茶","shortDescription":"享受下午茶的时间","longDescription":"忙碌的生活带给我们无限的压力\r\n在美丽的午后，让我们享受一杯温热的红茶。\r\n给我们忙绿的生活增添些许的宁静。\r\n快来享受这美妙的时刻吧~","author":"Linda","price":0,"language":"ZH","fiId":1586,"theme":{"id":"603","name":"下午茶","title":"下午茶","uxSize":216114,"apkSize":703501,"price":0.0,"uxHvga":"fa7199c5ff804aad96ced6d3a7420b2e/xiawucha_h.ux","uxWvga":"fa7199c5ff804aad96ced6d3a7420b2e/xiawucha_w.ux","apkPath":"fa7199c5ff804aad96ced6d3a7420b2e/xiawucha.apk","uxPath":null,"dtype":"0","marketURL":"com.xiawucha","version":"1","iconPath":"fa7199c5ff804aad96ced6d3a7420b2e/icon_xiawucha.jpg","adPath":null,"preWebPath":"fa7199c5ff804aad96ced6d3a7420b2e/pre_web_xiawucha.jpg","preClientPath":"fa7199c5ff804aad96ced6d3a7420b2e/pre_client_xiawucha.jpg","createTime":"2013-11-13 16:32:32","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"3916","title":"甜蜜小鼠","shortDescription":"甜蜜的滋味只有和你才有","longDescription":"和你在一起，处处都散发着甜蜜的滋味。拉下气球，和气球一起飞翔，整个世界都弥漫着幸福的滋味。亲爱的，我要和你永远在一起！","author":"Daisy","price":0,"language":"ZH","fiId":1736,"theme":{"id":"657","name":"甜蜜小鼠","title":"甜蜜小鼠","uxSize":944782,"apkSize":1449123,"price":0.0,"uxHvga":"b4995470fc854d17b4e5776164f3290f/tianmixiaoshu_h.ux","uxWvga":"b4995470fc854d17b4e5776164f3290f/tianmixiaoshu_w.ux","apkPath":"b4995470fc854d17b4e5776164f3290f/tianmixiaoshu.apk","uxPath":null,"dtype":"0","marketURL":"com.tianmixiaoshu","version":"1","iconPath":"b4995470fc854d17b4e5776164f3290f/icon_tianmixiaoshu.jpg","adPath":null,"preWebPath":"b4995470fc854d17b4e5776164f3290f/pre_web_tianmixiaoshu.jpg","preClientPath":"b4995470fc854d17b4e5776164f3290f/pre_client_tianmixiaoshu.jpg","createTime":"2014-02-10 09:27:07","modifyTime":null,"downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null},{"id":"1408","title":"化蝶","shortDescription":"化蝶翩翩舞，恩爱不绝情","longDescription":"楼台一别恨如海，泪染双翅身化彩蝶，翩翩花丛来，历尽磨难真情在，天长地久不分开。","author":"Daisy","price":0,"language":"ZH","fiId":542,"theme":{"id":"210","name":"化蝶","title":"化蝶","uxSize":1947809,"apkSize":3494598,"price":0.0,"uxHvga":"a21344911d0c482aae6270bf6447665d/huadie_h.ux","uxWvga":"a21344911d0c482aae6270bf6447665d/huadie_w.ux","apkPath":"a21344911d0c482aae6270bf6447665d/huadie.apk","uxPath":null,"dtype":"0","marketURL":"com.tpad.change.unlock.content.hua4die2","version":"1","iconPath":"a21344911d0c482aae6270bf6447665d/icon_huadie.jpg","adPath":null,"preWebPath":"a21344911d0c482aae6270bf6447665d/pre_web_huadie.jpg","preClientPath":"a21344911d0c482aae6270bf6447665d/pre_client_huadie.jpg","createTime":"2013-01-29 16:08:06","modifyTime":"2013-05-28 17:47:01","downloadURL":null,"totalDownload":null,"ishot":0,"isnew":0,"percent":1},"store":null,"offset":null}]};
+
+$(document).ready(function(e) {
+	cw = $(window).width();
+	//cw = 480;
+	$(".ads").css("height",cw*220/480);
+	$(".ads").css("padding-top",cw*10/480);
+	$(".ads").css("padding-bottom",cw*10/480+2);
+	$(".ads").css("padding-left",cw*10/480);
+	$(".ads").css("padding-right",cw*10/480);
+	$(".ads_bar img").css("margin-top",cw*12/480);
+	$(".ads_bar p").css("margin-top",cw*10/480);
+	$(".ads_bar p").css("margin-left",cw*10/480);	
+	$(".ads_bar p").css("font-size",cw*17/480);
+	$(".ads_bar p").css("line-height",cw*22/480+'px');
+	$(".tab").css("height",cw*62/480);
+	$(".tab p").css("font-size",cw*22/480);
+	$(".tab p").css("line-height",$(".tab").height()+'px');
+	var topic = eval(data);
+	document.getElementById('topicImg').src ="http://www.uichange.com/ums3-client2/files/"+topic.topic.icon;
+	document.getElementById('word').innerHTML = topic.topic.description;
+	addContainerList();
+	
+});
+
+function details(id){
+	alert(id);
+}
+
+function addContainerList(){
+	var apps=null;
+	var dataF = 9*(number+1);
+	apps = eval(data);
+	console.log(apps.fileStoreInfos.length);
+	if(apps.fileStoreInfos.length>9*(number+1)){
+		dataF = 9*(number+1);
+	}else{
+		page++;
+		dataF = parseInt(apps.fileStoreInfos.length/3)*3;
+		$.ajax({ 
+			type:'get', 
+			url:'http://www.uichange.com/ums3-client2/app/f/topic/tid'+tid+'/p'+page+'.json', 
+			dataType:'text',
+			success: function(json) {//success
+				 if (typeof json != 'undefined') {
+					 	if(JSON.parse(json).code == 900){
+							loadingMore = 1;
+							$("#Sicon").removeClass();
+							$("#Stitle").html("");
+						}
+						else{
+							addContainerList();
+							number = 0;
+						}
+				 }
+			},
+			error : function() {
+				loadingMore = 1;
+			},
+		});	
+	}
+	for(i=number*9;i<dataF;i++){
+		var vThumb=document.createElement("div");
+		var vLink = document.createElement("a");
+		var vImg=document.createElement("img");
+		var vWordBar=document.createElement("p");
+		vThumb.setAttribute("class","thumb");
+		$(vLink).attr("onclick","details("+apps.fileStoreInfos[i].theme.id+")");
+		
+		vImg.src="http://www.uichange.com/ums3-client2/files/"+apps.fileStoreInfos[i].theme.iconPath;
+		$(vImg).bind("error",function(){ 
+			this.src="images/jp/default.jpg"; 
+		}); 
+		vWordBar.innerHTML=apps.fileStoreInfos[i].theme.title;
+		
+		vLink.appendChild(vImg);
+		vLink.appendChild(vWordBar);
+		
+		vThumb.appendChild(vLink);
+		
+		var vAddContainers=document.getElementById("start");
+		$(vAddContainers).before(vThumb);
+	}
+	$(".wrapper").css("padding-left",cw*6/480);
+	$(".wrapper").css("padding-right",cw*6/480);
+	$(".thumb").css("height",cw*280/480);
+	$(".thumb p").css("font-size",cw*18/480);
+	$(".thumb p").css("line-height",cw*40/480+'px');
+	if(apps.fileStoreInfos.length<=9*(number+1)){
+		$("#bottomBar").css("display","block");
+		$("#more").css("display","block");
+	}
+
+}
+
+$(document).scroll(function(){
+	//console.log($("#containers").height()-$(window).height());
+	console.log(loadingMore);
+	if($(document).scrollTop()>=$("#containers").height()-$(window).height()-50 && loading==0 && loadingMore == 0){
+		loading = 1;
+		$("#Sicon").removeClass();
+		$("#Sicon").addClass('ui-loading');
+		 $("#Stitle").html("正在加载");
+		setTimeout(function(){
+			number++;
+			addContainerList();
+			loading=0;
+			$("#Sicon").removeClass();
+			$("#Sicon").addClass('ui-refresh-icon');
+		 	$("#Stitle").html("加载更多");
+			if(loadingMore == 1){
+				$("#Sicon").removeClass();
+				$("#Stitle").html("");
+			}
+		},1000);
+	}
+});
+</script>
+</html>

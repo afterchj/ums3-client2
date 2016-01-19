@@ -1,0 +1,134 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1, maximum-scale=1">
+<title>专题</title>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/zeptogame.js"></script>
+<style>
+.ads_bar{
+	text-align:center;
+}
+.ads_bar img{
+	width:95%;
+}
+</style>
+</head>
+
+<body class="BorderImage">
+	<div class="ads ads_t">
+    	<div class="ads_bars">
+        	<div id="dk_game_slider" class="ui-slider">
+            <div class="ui-slider-wheel">
+                <div class="ui-slider-group">
+
+                </div>
+            </div>
+            <p class="ui-slider-items-dots">
+               
+            </p>
+        </div>
+        </div>
+    </div>
+	<div style="height:5%;width:100%"  id="empty"></div>
+</body>
+
+
+<script>
+var cw;
+var bars = [];
+var data = {
+		"topics" : [{"description":"那些年，我们一起追的“小清新”\r\n","editDate":"2014-05-12","icon":"category/f690c8709b81406cba5de1908055bd6b.jpg","id":19,"name":"小清新专题","sort":1,"topicFileLinkList":[]},{"description":"一个人旅行，即使看遍世界，心里总有孤独","editDate":"2014-05-12","icon":"category/539283abb97a434d9726dc4b70ea8c84.jpg","id":18,"name":"一起去旅行","sort":2,"topicFileLinkList":[]},{"description":"简约而不简单","editDate":"2014-05-12","icon":"category/1053d3339e114e80ad779e9b38d1dafa.jpg","id":16,"name":"极简主义","sort":3,"topicFileLinkList":[]},{"description":"致我们都在追的韩剧，二千和叫兽爱情马拉松，男神和女神的PK……","editDate":"2014-05-12","icon":"category/aa560c5b5234465d80cbaeb86d83a3c5.jpg","id":11,"name":"来自星星的你","sort":4,"topicFileLinkList":[]},{"description":"2014，爱你一世，当情人节遇到元宵节，FUN主题为你开启爱情浪漫，告白不是距离","editDate":"2014-05-12","icon":"category/41406c9614cc4fcdac58316bb8622a29.jpg","id":10,"name":"2014，爱你一世","sort":5,"topicFileLinkList":[]},{"description":"我每天都在数着你的笑，可是你连笑的时候，都好寂寞。他们说你的笑容，又漂亮又落拓","editDate":"2014-05-12","icon":"category/c4aa904aa00c40c0a91eeb27961b4b7b.jpg","id":12,"name":"青春=？！忧伤","sort":5,"topicFileLinkList":[]},{"description":"记忆中的小脚丫，肉嘟嘟的小嘴巴，时间都去哪儿了 ，还没好好感受年轻就老了\r\n","editDate":"2014-05-12","icon":"category/6e4758aaff6e4974967d1b364ff076ed.jpg","id":15,"name":"时间都去哪儿了","sort":5,"topicFileLinkList":[]},{"description":"你永远也看不到我最寂寞时候的样子，因为只有你不在我身边，我才最寂寞……","editDate":"2014-05-12","icon":"category/6ec1404ea9504cbda860a1a0a690fdb3.jpg","id":4,"name":"非主流专题","sort":6,"topicFileLinkList":[]},{"description":"各种乐器组成的锁屏集合，无论何时何地，让美妙的音乐陪伴你左右......","editDate":"2014-05-12","icon":"category/5367bc1acb7e41a1b77b4aefc604017b.jpg","id":6,"name":"音乐专题","sort":6,"topicFileLinkList":[]},{"description":"2014马年将到，您希望马上有什么？#马上有#【终极版】：马上有钱、马上有房、马上有妹子、马上有车……下载使用锁屏，让愿望成真！","editDate":"2014-05-12","icon":"category/e837662b4eef4537b23b699d53698dcc.jpg","id":9,"name":"14年，马上有礼","sort":6,"topicFileLinkList":[]},{"description":"无论年龄多大，我们只过女生节，给自己一个完美蜕变，爱自己没商量","editDate":"2014-05-12","icon":"category/de2f3e3ac2054c3387ec3a1fad85c079.jpg","id":13,"name":"3.7女生节","sort":6,"topicFileLinkList":[]},{"description":"春天，繁花提示：花期只一次。错过了，就再也没有风景！","editDate":"2014-05-12","icon":"category/c9360374b6554b23afbfcdf975e98e99.jpg","id":14,"name":"春の物语","sort":6,"topicFileLinkList":[]},{"description":"DIY就是自己动手做，在这里您可以选择自己喜欢的图片，设计完成自己的个性主题。","editDate":"2014-05-12","icon":"category/73921f6e0c714f418dda51077c4a0cfe.jpg","id":5,"name":"DIY专题","sort":7,"topicFileLinkList":[]},{"description":"十二星座于性别、血型一起影响着你的性格爱情运势，拥有你的星座主题，让命运尽在掌中。","editDate":"2014-05-12","icon":"category/84a41b3dbfa0411cb9fb3d2d2b83a237.jpg","id":1,"name":"星座专题","sort":9,"topicFileLinkList":[]},{"description":"型男必备，专为男生量身打造的炫酷锁屏主题，快行动起来，告诉她你真的很MAN。","editDate":"2014-05-12","icon":"category/b3543b6df20841089a9611d0741c1bf5.jpg","id":2,"name":"男士专题","sort":10,"topicFileLinkList":[]}],
+		"tbars" : '[{"pic":"http://www.uichange.com/ums3-client2/files//poll/9074949491320724744.jpg","href":"http://www.uichange.com/ums3-client2/app/m/details/id353","ext":true},{"pic":"http://www.uichange.com/ums3-client2/files//poll/8198170231121950736.jpg","href":"http://www.uichange.com/ums3-client2/app/m/details/id321","ext":true},{"pic":"http://www.uichange.com/ums3-client2/files//poll/7166226117739556988.jpg","href":"http://www.uichange.com/ums3-client2/app/m/topic/tid4","ext":true}]'
+	};
+
+$(document).ready(function(e) {
+	cw = $(window).width();
+	//cw = 480;
+	var ad = eval(data.tbars);
+	for(i=0;i<ad.length;i++){
+		//bars1[i]=JSON.stringify("{'pic':'"+ad[i].downloadUrl+"','href':'"+ad[i].linkUrl+"','ext':true}");
+		var obj=new Object;
+		obj.pic=ad[i].pic;
+		obj.href = ad[i].href;
+		obj.ext = ad[i].ext;		
+		bars[i]= obj;
+	}	
+	console.log(bars);
+	//var bars = [{'pic':'images/zt/ads/1.jpg',"href":"http://www.baidu.com","ext":true},{"pic":"images/zt/ads/2.jpg","href":"http://www.baidu.com","ext":true},{"pic":"images/zt/ads/3.jpg","href":"http://www.baidu.com","ext":true}];
+	$.ui.slider('#dk_game_slider', {
+		index : bars.rand(),
+		showArr : false,
+		autoPlayTime : 2500,
+		content : bars
+	});
+	addContainerList();
+});
+
+function addContainerList(){
+	var apps=null;
+	apps = eval(data.topics);
+	for(i=0;i<apps.length;i++){
+		var vAds=document.createElement("div");
+		var vLink = document.createElement("a");
+		var vAds_bar=document.createElement("div");
+		var vTitle=document.createElement("div");
+		var vName=document.createElement("div");
+		var vDate=document.createElement("div");
+		var vImg=document.createElement("img");
+		var vWordBar=document.createElement("p");
+		
+		vAds.setAttribute("class","ads");
+		var linkLog="http://www.uichange.com/ums3-client2/app/f/topic/tid"+apps[i].id;
+		$(vLink).attr("href",linkLog);
+		
+		vAds_bar.setAttribute("class","ads_bar");
+		
+		vTitle.setAttribute("class","title");
+		vName.setAttribute("class","name");
+		vDate.setAttribute("class","date");
+		
+		vName.innerHTML=apps[i].name;
+		vDate.innerHTML=apps[i].editDate;
+		vImg.src="http://www.uichange.com/ums3-client2/files/"+apps[i].icon;
+
+		vWordBar.innerHTML=apps[i].description;
+		
+		vTitle.appendChild(vName);
+		vTitle.appendChild(vDate);
+		
+		vAds_bar.appendChild(vTitle);
+		vAds_bar.appendChild(vImg);
+		vAds_bar.appendChild(vWordBar);
+		
+		vLink.appendChild(vAds_bar);
+		
+		vAds.appendChild(vLink);
+		
+		var vAddContainers=document.getElementById("empty");
+		$(vAddContainers).before(vAds);
+	}
+	$(".ads").css("height",cw*250/480);
+	$(".ads").css("padding-top",cw*10/480);
+	$(".ads").css("padding-left",cw*10/480);
+	$(".ads").css("padding-right",cw*10/480);
+	$(".ads_bar p").css("margin-top",cw*10/480);
+	$(".ads_bar p").css("margin-left",cw*10/480);	
+	$(".ads_bar p").css("font-size",cw*17/480);
+	$(".ads_bar p").css("line-height",cw*22/480+'px');
+	$(".ads_t").css("height",cw*120/480);
+	$(".ads_t").css("padding-bottom",'0px');
+	$(".ads_bars").css("padding-top",cw*6/480);
+	$(".ads_bars").css("padding-bottom",cw*6/480+2);
+	$(".ads_bars").css("height",cw*105/480);
+	$(".title").css("height",cw*40/480);
+	$(".title").css("line-height",cw*40/480+'px');
+	$(".title").css("margin-top",cw*5/480);
+	$(".name").css("font-size",cw*20/480);
+	$(".date").css("font-size",cw*14/480);
+
+}
+</script>
+</html>

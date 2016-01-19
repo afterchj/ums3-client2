@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LogCountUserDao">
+
+	<select id="getTotalUserVisitors" resultType="Long" parameterType="String">
+		<![CDATA[select SUM(c.total_visit) "visit" from log_count_user c where c.user_id=#{uid}]]>
+	</select>
+	
+</mapper>

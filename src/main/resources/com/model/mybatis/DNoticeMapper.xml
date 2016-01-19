@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.NoticeDao">
+
+    <resultMap type="DNotice" id="standardNoticeMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="detail" column="detail" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="type" column="type" javaType="Integer" jdbcType="INTEGER"/>
+      	<result property="dtype" column="dtype" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="publishDate" column="publish_date" javaType="Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<sql id="simple_columns">
+		id, name, type, dtype, publish_date, uid
+	</sql>
+	
+	<sql id="complete_columns">
+		id, name, detail, type, dtype, publish_date, uid
+	</sql>
+	
+	<select id="getById" resultMap="standardNoticeMap" parameterType="string" >
+		SELECT <include refid="complete_columns"/> from f_notice g where g.id = #{id}
+	</select>
+	
+	<select id="getSystemAndUserNotice" resultMap="standardNoticeMap"  >
+		SELECT <include refid="simple_columns"/> from f_notice g where g.uid is null or g.uid = #{uid} order by publish_date desc limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<insert id="save" parameterType="DNotice" >
+		insert into f_notice(<include refid="complete_columns"/>) values(#{id}, #{name}, #{detail}, #{type}, #{dtype}, #{publishDate}, #{uid});
+	</insert>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.trade.GoodsDao">
+
+    <resultMap type="DGoods" id="standardGoodsMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="shelf" column="shelf_id" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="remarks" column="remarks" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="stock" column="stock" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="sales" column="sales" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="expiryDate" column="expiry_date" javaType="Date" jdbcType="TIMESTAMP"/>
+       	<result property="descr" column="descr" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="instructions" column="instructions" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="sort" column="sort" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="price" column="price" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="payback" column="payback" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<sql id="complete_columns">
+		id, name, remarks, stock, sales, expiry_date, descr, instructions, price, payback, create_date, shelf_id, sort
+	</sql>
+	
+	<sql id="simple_columns">
+		id, name, stock, sales, expiry_date, price, payback, create_date, shelf_id, sort
+	</sql>
+	
+	<select id="getByShelf" resultMap="standardGoodsMap"  >
+		SELECT <include refid="simple_columns"/> from f_goods g where g.shelf_id=#{sid} order by g.sort asc limit #{startIndex},#{pageSize} 
+	</select>
+	
+	<select id="getCompleteGoodsById" resultMap="standardGoodsMap" parameterType="string" >
+		SELECT <include refid="complete_columns"/> from f_goods g where g.id = #{id}
+	</select>
+	
+	<select id="getSimpleGoodsById" resultMap="standardGoodsMap" parameterType="string" >
+		SELECT <include refid="simple_columns"/> from f_goods g where g.id = #{id}
+	</select>
+	
+	<update id="updateStockAndSales" parameterType="DGoods">
+	  update f_goods
+	    <set>
+	      <if test="stock != null">stock=#{stock},</if>
+	      <if test="sales != null">sales=#{sales}</if>
+	    </set>
+	  where id=#{id}
+	</update>
+
+</mapper>

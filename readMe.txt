@@ -1,0 +1,1 @@
+1. 商品图片位置。 /mnt/shared/storage/public/trade/goods/icon/ 

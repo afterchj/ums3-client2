@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.trade.OrderDao">
+
+    <resultMap type="DOrder" id="standardOrderMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+      	<result property="fullName" column="full_name" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="descr" column="descr" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="address" column="address" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="serialno" column="serialno" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="goods" column="goods_id" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="logistics" column="logistics_id" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="price" column="price" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<sql id="order_columns">
+		id, name, full_name, descr, qq, mobile, address, serialno, goods_id, uid, price, status, create_date, logistics_id, is_delete
+	</sql>
+	
+	<select id="getByUser" resultMap="standardOrderMap"  >
+		SELECT <include refid="order_columns"/> from f_order g where g.uid=#{uid} order by create_date desc limit #{startIndex},#{pageSize}
+	</select>
+	
+	<insert id="save" parameterType="DOrder" >
+		insert into f_order(<include refid="order_columns"/>) values(#{id}, #{name}, #{fullName}, #{descr}, #{qq}, #{mobile}, #{address}, #{serialno}, #{goods}, #{uid}, #{price}, #{status}, #{createDate}, #{logistics}, 0);
+	</insert>
+	
+	
+</mapper>

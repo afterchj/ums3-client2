@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FileStoreInfoDao">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true" eviction="LRU" size="2048"> 
+        <property name="timeToIdleSeconds" value="30"/><!--30s-->
+        <property name="timeToLiveSeconds" value="60"/><!--60s-->
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache>
+    
+	<resultMap type="FileStoreInfo" id="FileStoreInfoMap">
+		<id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+		<result property="title" column="title" javaType="String" jdbcType="VARCHAR"/>
+		<result property="shortDescription" column="short_description" javaType="String" jdbcType="VARCHAR"/>
+		<result property="longDescription" column="long_description" javaType="String" jdbcType="VARCHAR"/>
+		<result property="author" column="author" javaType="String" jdbcType="VARCHAR"/>
+		<result property="price" column="price" javaType="Long" jdbcType="VARCHAR"/>
+		<result property="language" column="language" javaType="String" jdbcType="VARCHAR"/>
+		<result property="fiId" column="fi_id" javaType="Long" jdbcType="INTEGER"/>
+		<result property="offset" column="offset" javaType="Long" jdbcType="VARCHAR"/>
+		<association property="theme" column="f_id" select="com.dao.ThemeFileDao.getThemeFile"></association>		
+	</resultMap>
+
+	<select id="getHomeByGender" resultMap="FileStoreInfoMap" parameterType="string">
+		SELECT DISTINCT f.*, ffi.* from f_file f left JOIN f_file_info ffi ON ffi.f_id = f.id left JOIN f_file_shelf s ON f.id = s.f_id left JOIN f_category c ON s.s_id = c.id WHERE c.value=#{type} AND c.parent_id = 2 and ffi.LANGUAGE ='ZH' order by s.sort limit 0, 51
+	</select>
+	
+	<select id="get" resultMap="FileStoreInfoMap" parameterType="string">
+		select DISTINCT f.*, ffi.* from f_file f left join f_file_info ffi on f.id = ffi.f_id where f.id=#{id} and ffi.LANGUAGE ='ZH'
+	</select>
+	
+	<select id="getInShelf" resultMap="FileStoreInfoMap" parameterType="string">
+		select DISTINCT f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id left join f_file_shelf ffs on f.id = ffs.f_id left join f_category cate on cate.dtype='shelf' and ffs.s_id = cate.id where cate.`value` = #{shelf} and cate.parent_id = 2 and ffi.LANGUAGE ='ZH'  ORDER BY ffs.sort limit 0, 100;
+	</select>
+	
+	<select id="getNewestInShelf" resultMap="FileStoreInfoMap">
+		select DISTINCT f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id left join f_file_shelf ffs on f.id = ffs.f_id left join f_category cate on cate.dtype='shelf' and ffs.s_id = cate.id where  cate.parent_id = 2 and ffi.LANGUAGE ='ZH'  ORDER BY ffs.sort limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByCategory" resultMap="FileStoreInfoMap" parameterType="string">
+		select distinct f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id left join f_category_file fcf on fcf.file_id = f.id left join f_file_shelf ffs on ffs.f_id = f.id where f.dtype=0 and fcf.category_id = #{categoryId} and ffi.LANGUAGE ='ZH' order by ffs.sort limit 0, 100;
+	</select>
+	
+	<select id="getByCategoryWithNewestPage" resultMap="FileStoreInfoMap">
+		<![CDATA[SELECT DISTINCT  f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id left join f_category_file fcf on fcf.file_id = f.id where f.dtype=0 and fcf.category_id = #{categoryId} and ffi.LANGUAGE ='ZH'  ORDER BY f.modify_time desc limit #{startIndex},#{pageSize};]]>
+	</select>
+	
+	
+	<select id="getByGenderWithPage" resultMap="FileStoreInfoMap">
+		<![CDATA[SELECT DISTINCT f.*, ffi.* from f_file f left JOIN f_file_info ffi ON ffi.f_id = f.id left JOIN f_file_shelf s ON f.id = s.f_id left JOIN f_category c ON s.s_id = c.id WHERE c.value=#{gender} AND c.parent_id = 2 and ffi.LANGUAGE ='ZH' order by s.sort limit #{startIndex}, #{pageSize};]]>
+	</select>
+	
+	<select id="getByTopicWithPage" resultMap="FileStoreInfoMap">
+		select distinct f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id left join f_file_topic fft on fft.theme_id = f.id where fft.topic_id = #{topicId} and ffi.LANGUAGE ='ZH' ORDER BY fft.sort limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByTemplateWithPage" resultMap="FileStoreInfoMap">
+		select distinct f.*, ffi.* from f_file f  left join f_file_template fft on fft.theme_id = f.id  left join f_file_info ffi on ffi.f_id = f.id where  ffi.language='ZH'  and fft.template_id = #{templateId} ORDER BY fft.sort limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByHottestWithPage" resultMap="FileStoreInfoMap">
+		SELECT distinct f.*, ffi.* FROM f_file f RIGHT JOIN (SELECT distinct c.theme_name, sum(c.total_down) AS download	FROM log_count_store c WHERE c.log_date BETWEEN #{sdate} AND #{edate} GROUP BY c.theme_name) AS l ON f.title = l.theme_name JOIN f_file_info ffi ON f.id = ffi.f_id JOIN f_file_store fs ON f.id = fs.f_id WHERE ffi. LANGUAGE ='ZH' AND fs.s_id =2 AND f.dtype = 0 ORDER BY l.download DESC LIMIT #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByCategoryWithHottestPage" resultMap="FileStoreInfoMap">
+		SELECT distinct f.*, ffi.* FROM f_file f left join f_category_file fcf on fcf.file_id = f.id RIGHT JOIN (SELECT c.theme_name, sum(c.total_down) AS download	FROM log_count_store c WHERE c.log_date BETWEEN #{sdate} AND #{edate} GROUP BY c.theme_name) AS l ON f.title = l.theme_name JOIN f_file_info ffi ON f.id = ffi.f_id JOIN f_file_store fs ON f.id = fs.f_id WHERE fcf.category_id = #{categoryId} and ffi. LANGUAGE ='ZH' AND fs.s_id =2 AND f.dtype = 0 ORDER BY l.download DESC LIMIT #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByAuthorWithPage" resultMap="FileStoreInfoMap">
+		SELECT distinct f.*, ffi.* from f_file f left join f_file_info ffi on ffi.f_id = f.id where f.dtype=0 and ffi.LANGUAGE ='ZH' and ffi.author = #{realName} LIMIT #{startIndex}, #{pageSize}
+	</select>
+
+</mapper>

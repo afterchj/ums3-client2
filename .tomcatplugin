@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcatProjectProperties>
+    <rootDir>/</rootDir>
+    <exportSource>false</exportSource>
+    <reloadable>true</reloadable>
+    <redirectLogger>true</redirectLogger>
+    <updateXml>true</updateXml>
+    <warLocation></warLocation>
+    <extraInfo></extraInfo>
+    <webPath>/ums3-client2</webPath>
+    <webClassPathEntries>
+        <webClassPathEntry>/tpadsz.cic.api_v0.1/target/classes</webClassPathEntry>
+        <webClassPathEntry>/tpadsz.core_v0.1/target/classes</webClassPathEntry>
+        <webClassPathEntry>/tpadsz.ctc.api_v0.1/target/classes</webClassPathEntry>
+        <webClassPathEntry>/tpadsz.img.api_v0.1/target/classes</webClassPathEntry>
+        <webClassPathEntry>/tpadsz.uic.api_v0.1/target/classes</webClassPathEntry>
+    </webClassPathEntries>
+</tomcatProjectProperties>
