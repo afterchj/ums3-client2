@@ -7,7 +7,7 @@
 		<groupId>com.tpadsz.ums</groupId>
 		<artifactId>ums3</artifactId>
 		<version>3.5.0</version>
-		<relativePath>./UMS3/pom.xml</relativePath>
+		<relativePath>./ums3-3.5.0.pom</relativePath>
 	</parent>
 	<artifactId>ums3-client2</artifactId>
 	<packaging>war</packaging>
@@ -241,7 +241,7 @@
 		<dependency>
 			<groupId>com.tpadsz</groupId>
 			<artifactId>img.api</artifactId>
-			<version>0.1.2</version>
+			<version>0.1.4</version>
 		</dependency>
 
 		<dependency>
@@ -253,7 +253,7 @@
 		 <dependency>
 			<groupId>com.tpadsz</groupId>
 			<artifactId>ctc.api</artifactId>
-			<version>0.3.3.0</version>
+			<version>0.3.4.1</version>
 		</dependency>
 
 		<dependency>
