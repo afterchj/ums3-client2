@@ -90,7 +90,7 @@ public class CategoryController {
     	for (FrontThemeFileVo vo : fileStoreInfoVos) {
     		vo.setDownloadTimes(countService.countTotalDownload(vo.getTitle()));	
     	}
-    	model.put("data", JSONObject.toJSON(fileStoreInfoVos));
+		model.put("data", JSONObject.toJSON(fileStoreInfoVos));
     	return "category-newest-list";
 	}
 	

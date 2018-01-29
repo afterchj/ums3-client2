@@ -427,7 +427,7 @@ public class SMTPAppender extends AppenderSkeleton implements
 				mp.addBodyPart(part);
 				msg.setContent(mp);
 				msg.setSentDate(new Date());
-				Transport.send(msg);
+//				Transport.send(msg);
 
 			} catch (MessagingException e) {
 				LogLog.error(

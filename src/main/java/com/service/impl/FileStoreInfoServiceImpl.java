@@ -479,7 +479,6 @@ public class FileStoreInfoServiceImpl implements FileStoreInfoService {
 				String ftfListJson = (String) redisTemplate.opsForHash().get("ums3_locker_category", item);
 				List<FrontThemeFileVo> frontThemeFileVoList = JSONObject.parseArray(ftfListJson, FrontThemeFileVo.class);
 				frontCategoryInfoVoList.add(this.setFrontCategoryInfoVo(frontThemeFileVoList, item, num));
-				
 			}
 		} else {
 			Map<String, List<FrontThemeFileVo>> ftfmap = this.getNewHomePageFile();

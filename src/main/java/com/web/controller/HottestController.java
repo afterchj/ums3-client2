@@ -70,13 +70,14 @@ public class HottestController {
     	}
         return fileStoreInfoService.getSimplifyScrollJson(fileStoreInfoVos);
 	}
-	
+
+	//获取最热主题
 	@RequestMapping("/{gender}/hottest/p{page}/o{offset}")
 	@ResponseBody
 	public String moreWithAd(@PathVariable("gender") String gender, @PathVariable("offset")Long offset, @PathVariable("page") Long page, ModelMap model){
-        List<FrontThemeFileVo> fileStoreInfoVos = fileStoreInfoWithAdService.getHottestPage(gender, page, offset);
-        for (FrontThemeFileVo vo : fileStoreInfoVos) {
-    		vo.setDownloadTimes(countService.countTotalDownload(vo.getTitle()));	
+		List<FrontThemeFileVo> fileStoreInfoVos = fileStoreInfoWithAdService.getHottestPage(gender, page, offset);
+		for (FrontThemeFileVo vo : fileStoreInfoVos) {
+    		vo.setDownloadTimes(countService.countTotalDownload(vo.getTitle()));
     	}
         return fileStoreInfoService.getSimplifyScrollJson(fileStoreInfoVos);
 	}

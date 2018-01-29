@@ -18,6 +18,27 @@
 
 	<dubbo:application name="ums3-client2" />
 
+
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		  init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.minsize}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="maxActive" value="${jdbc.maxsize}" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="false" />
+		<property name="filters" value="stat" />
+	</bean>
+
+
 	<!-- 业务使用 -->
 	<dubbo:reference id="accountManager" version="0.3.0"
 		interface="com.tpadsz.uic.user.api.AccountManager" validation="true" />
@@ -63,6 +84,8 @@
 				<ref bean="updateGoodsStockAndSalesTrigger"/>
 				<ref bean="updateMemberByFillingUidTrigger"/>
 				<ref bean="generateTasksTrigger"/>
+				<ref bean="refreshIntoLogCountStoreTrigger"/>
+				<ref bean="refreshIntoSPFileDownloadTrigger"/>
 			</list>
 		</property>
 		<property name="taskExecutor" ref="executor" />
@@ -105,6 +128,31 @@
 	<bean id="generateTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="generateTasksJob" />
 		<property name="cronExpression" value="0 30 3 * * ?" />
+	</bean>
+
+	<!--配置自动刷新数据-->
+	<bean id="refreshIntoLogCountStoreJob"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="logCountStoreService" />
+		<property name="targetMethod" value="refreshIntoLogCountStore" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="refreshIntoLogCountStoreTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="refreshIntoLogCountStoreJob" />
+		<property name="cronExpression" value="0 0 22 * * ?" />
+	</bean>
+
+
+	<!--配置视频文件日志自动刷新-->
+	<bean id="refreshIntoSPFileDownloadJob"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spFileDownloadService" />
+		<property name="targetMethod" value="refreshIntoSpFileDownload" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="refreshIntoSPFileDownloadTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="refreshIntoSPFileDownloadJob" />
+		<property name="cronExpression" value="0 0 23 * * ?" />
 	</bean>
 
 	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
@@ -289,7 +337,7 @@
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
           p:usePool="true">
     </bean>
-	
+
 		<context:property-placeholder
 			ignore-resource-not-found="true"
 			location="classpath*:/setup.properties, classpath*:/setup.production.properties" />
@@ -320,7 +368,7 @@
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
           p:usePool="true">
     </bean>
-	
+
 		<context:property-placeholder
 			ignore-resource-not-found="true"
 			location="classpath*:/setup.properties, classpath*:/setup.demo.properties" />
@@ -344,14 +392,14 @@
 			<property name="filters" value="stat" />
 		</bean>
 	</beans>
-	
+
 	<beans profile="backup">
 	<bean id="jedisConnFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
           p:usePool="true">
     </bean>
-	
+
 		<context:property-placeholder
 			ignore-resource-not-found="true"
 			location="classpath*:/setup.properties, classpath*:/setup.demo.properties" />

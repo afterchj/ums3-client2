@@ -39,11 +39,11 @@
 	</select>
 	
 	<select id="getTotalCountWithoutUid" resultType="Long" >
-		select count(*) from member_user c where c.uid is null;
+		select count(*) from member_user c where c.id is null;
 	</select>
 	
 	<select id="getAllWithPageWithoutUid" resultMap="standardMemberMap">
-		select * from member_user where uid is null limit #{startIndex}, #{pageSize};
+		select * from member_user where id is null limit #{startIndex}, #{pageSize};
 	</select>
 	
 	<select id="getById" resultMap="standardMemberMap" parameterType="String">

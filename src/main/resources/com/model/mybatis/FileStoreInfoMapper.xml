@@ -61,9 +61,9 @@
 	</select>
 	
 	<select id="getByHottestWithPage" resultMap="FileStoreInfoMap">
-		SELECT distinct f.*, ffi.* FROM f_file f RIGHT JOIN (SELECT distinct c.theme_name, sum(c.total_down) AS download	FROM log_count_store c WHERE c.log_date BETWEEN #{sdate} AND #{edate} GROUP BY c.theme_name) AS l ON f.title = l.theme_name JOIN f_file_info ffi ON f.id = ffi.f_id JOIN f_file_store fs ON f.id = fs.f_id WHERE ffi. LANGUAGE ='ZH' AND fs.s_id =2 AND f.dtype = 0 ORDER BY l.download DESC LIMIT #{startIndex}, #{pageSize};
+	SELECT distinct f.*, ffi.* FROM f_file f RIGHT JOIN (SELECT distinct c.theme_name, sum(c.total_down) AS download	FROM log_count_store c WHERE c.log_date BETWEEN #{sdate} AND #{edate} GROUP BY c.theme_name) AS l ON f.title = l.theme_name JOIN f_file_info ffi ON f.id = ffi.f_id JOIN f_file_store fs ON f.id = fs.f_id WHERE ffi. LANGUAGE ='ZH' AND fs.s_id =2 AND f.dtype = 0 ORDER BY l.download DESC LIMIT #{startIndex}, #{pageSize};
 	</select>
-	
+
 	<select id="getByCategoryWithHottestPage" resultMap="FileStoreInfoMap">
 		SELECT distinct f.*, ffi.* FROM f_file f left join f_category_file fcf on fcf.file_id = f.id RIGHT JOIN (SELECT c.theme_name, sum(c.total_down) AS download	FROM log_count_store c WHERE c.log_date BETWEEN #{sdate} AND #{edate} GROUP BY c.theme_name) AS l ON f.title = l.theme_name JOIN f_file_info ffi ON f.id = ffi.f_id JOIN f_file_store fs ON f.id = fs.f_id WHERE fcf.category_id = #{categoryId} and ffi. LANGUAGE ='ZH' AND fs.s_id =2 AND f.dtype = 0 ORDER BY l.download DESC LIMIT #{startIndex}, #{pageSize};
 	</select>

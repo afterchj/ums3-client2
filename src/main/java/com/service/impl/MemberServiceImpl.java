@@ -105,7 +105,6 @@ public class MemberServiceImpl implements MemberService {
 					for (Member member : members) {
 						generateAppUser(member);
 					}
-
 				}
 			}
 			dayLogger.warn("updateMemberByFillingUid end.");

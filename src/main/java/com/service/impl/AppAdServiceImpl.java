@@ -69,7 +69,6 @@ public class AppAdServiceImpl implements AppAdService{
 			}else {
 				themeFiles.add(fileVo);
 			}
-			
 		}
 		return Lists.newArrayList(themeFiles.subList(0, themeFiles.size() < size.intValue() ? themeFiles.size() : size.intValue()).iterator());
 	}

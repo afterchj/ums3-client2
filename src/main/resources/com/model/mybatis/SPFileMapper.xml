@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SPFileDao">
+    <resultMap type="com.model.SPFile" id="standardSPFileMap">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="size" column="size" javaType="Double" jdbcType="DOUBLE"/>
+        <result property="duration" column="duration" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="downloadPath" column="downloadPath" javaType="String" jdbcType="VARCHAR"/>
+        <result property="iconPath" column="iconPath" javaType="String" jdbcType="VARCHAR"/>
+        <result property="lable" column="lable" javaType="String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="createTime" javaType="String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modifyTime" javaType="String" jdbcType="VARCHAR"/>
+        <result property="isHot" column="isHot" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isNew" column="isNew" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isRecommend" column="isRecommend" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+        <result property="totalDownload" column="totalDownload" javaType="Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="findById" parameterType="int" resultMap="standardSPFileMap">
+        SELECT
+            f.id as id,
+            f.name as name,
+            f.size as size,
+            f.duration as duration,
+            f.download_path as downloadPath,
+            f.icon_path as iconPath,
+            f.lable as lable,
+            f.create_time as createTime,
+            f.modify_time as modifyTime,
+            f.is_hot as isHot,
+            f.is_new as isNew,
+            f.is_recommend as isRecommend,
+            f.other as other,
+            sum(d.total_download) AS totalDownload
+        FROM
+            sp_file f
+        LEFT JOIN sp_file_download d ON f.id = d.file_id
+        WHERE
+            f.id = #{fileId}
+    </select>
+
+    <select id="getHottestPage" resultMap="standardSPFileMap">
+        SELECT
+            f.id as id,
+            f.name as name,
+            f.size as size,
+            f.duration as duration,
+            f.download_path as downloadPath,
+            f.icon_path as iconPath,
+            f.lable as lable,
+            f.create_time as createTime,
+            f.modify_time as modifyTime,
+            f.is_hot as isHot,
+            f.is_new as isNew,
+            f.is_recommend as isRecommend,
+            f.other as other,
+            l.download as totalDownload
+        FROM
+            sp_file f
+        LEFT JOIN (
+            SELECT DISTINCT
+                d.file_id as id,
+                sum(d.total_download) AS download
+            FROM
+                sp_file_download d
+            WHERE
+                d.log_date BETWEEN #{sdate}
+            AND #{edate}
+            GROUP BY
+                d.file_id
+        ) AS l ON f.id = l.id
+        ORDER BY
+            l.download DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="getNewestPage" resultMap="standardSPFileMap">
+       SELECT
+            f.id as id,
+            f.name as name,
+            f.size as size,
+            f.duration as duration,
+            f.download_path as downloadPath,
+            f.icon_path as iconPath,
+            f.lable as lable,
+            f.create_time as createTime,
+            f.modify_time as modifyTime,
+            f.is_hot as isHot,
+            f.is_new as isNew,
+            f.is_recommend as isRecommend,
+            f.other as other,
+            l.download as totalDownload
+        FROM
+            sp_file f
+        LEFT JOIN (
+            SELECT DISTINCT
+                d.file_id as id,
+                sum(d.total_download) AS download
+            FROM
+                sp_file_download d
+            WHERE
+                d.log_date BETWEEN #{sdate} AND #{edate}
+            GROUP BY
+                d.file_id
+        ) AS l ON f.id = l.id
+        ORDER BY f.modify_time  DESC
+        LIMIT #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="getRecommendFiles" resultMap="standardSPFileMap">
+      SELECT
+        f.id as id,
+        f.name as name,
+        f.size as size,
+        f.duration as duration,
+        f.download_path as downloadPath,
+        f.icon_path as iconPath,
+        f.lable as lable,
+        f.create_time as createTime,
+        f.modify_time as modifyTime,
+        f.is_hot as isHot,
+        f.is_new as isNew,
+        f.is_recommend as isRecommend,
+        f.other as other,
+        l.download as totalDownload
+      FROM
+        sp_file f
+      LEFT JOIN (
+      SELECT DISTINCT
+        d.file_id as id,
+        sum(d.total_download) AS download
+      FROM
+        sp_file_download d
+      WHERE
+        d.log_date BETWEEN #{sdate} AND #{edate}
+      GROUP BY
+        d.file_id
+                 ) AS l ON f.id = l.id
+      WHERE
+        f.is_new=1
+      ORDER BY
+        f.modify_time  DESC
+      LIMIT
+        6
+    </select>
+
+    <select id="findPartInfoById" parameterType="int" resultMap="standardSPFileMap">
+        SELECT
+        f.id as id,
+        f.name as name,
+        f.duration as duration,
+        f.icon_path as iconPath
+        FROM
+        sp_file f
+        WHERE
+        f.id = #{fileId}
+    </select>
+
+</mapper>

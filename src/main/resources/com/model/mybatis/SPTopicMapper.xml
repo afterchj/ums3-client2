@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SPTopicDao">
+
+    <resultMap type="SPTopic" id="standardTopicMap">
+        <id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="String"
+                jdbcType="VARCHAR"/>
+        <result property="value" column="value" javaType="String"
+                jdbcType="VARCHAR"/>
+        <result property="description" column="description" javaType="String"
+                jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" javaType="String"
+                jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" javaType="Long"
+                jdbcType="INTEGER"/>
+        <result property="editDate" column="edit_date" javaType="Date"
+                jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap type="SPFileTopic" id="standardFileTopicMap">
+        <id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+        <result property="fileId" column="file_id" javaType="Long"
+                jdbcType="INTEGER"/>
+        <result property="topicId" column="topic_id" javaType="Long"
+                jdbcType="INTEGER"/>
+        <result property="sort" column="sort" javaType="Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="showTopics" resultMap="standardTopicMap">
+        SELECT * FROM sp_topic ORDER BY edit_date DESC
+    </select>
+
+    <select id="showTopicFilesByTopicId" resultMap="standardFileTopicMap">
+        SELECT * FROM sp_file_topic f WHERE f.topic_id = #{topicId}
+    </select>
+
+</mapper>

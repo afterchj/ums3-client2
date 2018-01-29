@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SPItemDao">
+
+    <resultMap type="SPItem" id="videoType">
+        <id property="id" column="id" javaType="int" jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="value" column="value" javaType="String" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" javaType="String" jdbcType="VARCHAR"/>
+        <result property="description" column="description" javaType="String" jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="int" jdbcType="INTEGER"/>
+        <result property="parentId" column="parent_id" javaType="int" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap type="SPFile" id="typeInfo">
+        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="size" column="size" javaType="Double" jdbcType="DOUBLE"/>
+        <result property="duration" column="duration" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="downloadPath" column="download_path" javaType="String" jdbcType="VARCHAR"/>
+        <result property="iconPath" column="icon_path" javaType="String" jdbcType="VARCHAR"/>
+        <result property="lable" column="lable" javaType="String" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" javaType="String" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" javaType="String" jdbcType="VARCHAR"/>
+        <result property="isHot" column="is_hot" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isNew" column="is_new" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isRecommend" column="is_recommend" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="other" column="other" javaType="String" jdbcType="VARCHAR"/>
+        <!--<result property="totalDownload" column="totalDownload" javaType="Integer" jdbcType="INTEGER"/>-->
+    </resultMap>
+
+    <select id="getParentTypes" resultMap="videoType">
+		select * from sp_category where dtype='parent'
+	</select>
+
+    <select id="getSubTypes" resultMap="videoType" parameterType="string">
+		select * from sp_category where dtype='children'
+	</select>
+
+    <select id="getSubTypesById" resultMap="videoType" parameterType="int">
+        select sc.* from sp_category sp join sp_category sc on sp.id=sc.parent_id and sp.id=#{id}
+    </select>
+
+    <select id="subTypeInfo" resultMap="typeInfo" parameterType="int">
+      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id}
+    </select>
+</mapper>
