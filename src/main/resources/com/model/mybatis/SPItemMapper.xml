@@ -43,6 +43,6 @@
     </select>
 
     <select id="subTypeInfo" resultMap="typeInfo" parameterType="int">
-      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id}
+      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id}  ORDER BY sf.modify_time DESC
     </select>
 </mapper>
