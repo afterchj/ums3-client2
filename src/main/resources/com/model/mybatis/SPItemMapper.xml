@@ -31,18 +31,18 @@
     </resultMap>
 
     <select id="getParentTypes" resultMap="videoType">
-		select * from sp_category where dtype='parent'
+		select * from sp_category where dtype='parent' and status =0
 	</select>
 
     <select id="getSubTypes" resultMap="videoType" parameterType="string">
-		select * from sp_category where dtype='children'
+		select * from sp_category where dtype='children' and status =0
 	</select>
 
     <select id="getSubTypesById" resultMap="videoType" parameterType="int">
-        select sc.* from sp_category sp join sp_category sc on sp.id=sc.parent_id and sp.id=#{id}
+        select sc.* from sp_category sp join sp_category sc on sp.id=sc.parent_id and sp.id=#{id} and sc.status =0
     </select>
 
     <select id="subTypeInfo" resultMap="typeInfo" parameterType="int">
-      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id}  ORDER BY sf.modify_time DESC
+      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id} and sf.is_delete=0 ORDER BY sf.modify_time DESC
     </select>
 </mapper>
