@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+
+	<rule>
+		<from>^/download.html$</from>
+		<to type="forward">/app/download/client</to>
+	</rule>
+	
+	<rule>
+		<from>^/file-download!getClient.action$</from>
+		<to type="forward">/app/download/client</to>
+	</rule>
+	
+	<rule>
+		<from>^/home!adXml.action$</from>
+		<to type="forward">/app/ad.xml</to>
+	</rule>
+	
+	<rule>
+		<from>^/home.action$</from>
+		<to type="forward">/app/home</to>
+	</rule>
+	
+	<rule>
+		<from>^/home!diy.action$</from>
+		<to type="forward">/app/diy</to>
+	</rule>
+	
+	<rule>
+		<from>^/log/store/getc</from>
+		<to type="forward">/log/log!client.action</to>	
+	</rule>
+	
+	<rule>
+		<from>^/log/store/yd</from>
+		<to type="forward">/log/cmcc-theme-sync.action</to>	
+	</rule>
+	
+	<rule>
+		<from>^/log/content/([a-zA-Z0-9_]+)$</from>
+		<to type="forward">/log/log!content.action?do=$1</to>	
+	</rule>
+	
+	<rule>
+		<from>^/log/redirect$</from>
+		<to type="forward">/log/log!redirect.action</to>	
+	</rule>
+
+    <rule>
+        <from>^/log/coop</from>
+        <to type="forward">/log/log!coop.action</to>
+    </rule>
+
+	<rule>
+		<from>^/log/bc/([a-zA-Z0-9_]+)$</from>
+		<to type="forward">/log/log!poll.action?do=$1</to>	
+	</rule>
+	
+	<rule>
+		<from>^/poll/xml/([a-zA-Z0-9_]+)$</from>
+		<to type="forward">/poll/polling!toXml.action?store=$1</to>	
+	</rule>
+
+    <rule>
+        <from>^/poll2/xml/([a-zA-Z0-9_]+)$</from>
+        <to type="forward">/poll/poll2!generateXml.action</to>
+    </rule>
+
+    <rule>
+        <from>^/poll2/coop/xml$</from>
+        <to type="forward">/poll/poll2!coopXml.action</to>
+    </rule>
+	
+	<rule>
+		<from>^/nav/client$</from>
+		<to type="forward">/nav/fun-browser.action</to>
+	</rule>	
+	
+	<rule>
+		<from>^/nav/launch$</from>
+		<to type="forward">/nav/fun-browser!saveLog.action</to>
+	</rule>	
+	
+	<rule>
+		<from>^/nav/download$</from>
+		<to type="forward">/nav/fun-browser!getClient.action</to>
+	</rule>
+
+    <rule>
+        <from>^/home/shelf/([a-zA-Z0-9_]+)$</from>
+        <to type="forward">/home!shelf.action?sf=$1</to>
+    </rule>
+
+</urlrewrite>

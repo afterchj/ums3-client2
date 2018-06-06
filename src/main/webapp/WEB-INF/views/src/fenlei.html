@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1, maximum-scale=1">
+<title>分类</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/jquery-1.9.1.min.js" ></script>
+</head>
+
+<body class="BorderImage1">
+    <div class="wrapper" id="wrapper">
+
+    </div>        
+	<div style="height:5%;width:100%;clear:both"></div>
+</body>
+
+
+<script>
+var cw;
+var data={"categories":[{"id":"84","name":"清新","value":"001","icon":"/category/31303c90198b4d35a1ed7ba22a122e9a.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"1","name":"炫酷","value":"002","icon":"/category/e02ebf5f642040419c9885d14ada6c12.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"10","name":"简约","value":"003","icon":"/category/c79c8834349240f596a5d5b40516af15.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"82","name":"萌货","value":"004","icon":"/category/51a14ad5b6784aacb265072b5303816f.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"83","name":"动漫","value":"005","icon":"/category/3376630b7b274a37be32e237e95f8b39.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"81","name":"爱情","value":"006","icon":"/category/c9fb151238ed4d3b82cc2895200ee8b3.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"80","name":"创意","value":"007","icon":"/category/6e2b91a1249844f3a4209f677b8da5a6.jpg","description":"","parent":null,"files":[],"infos":[]},{"id":"85","name":"其他","value":"008","icon":"/category/5bf17762fa9a4cd78cc519f0b57021a3.jpg","description":"","parent":null,"files":[],"infos":[]}]};
+
+$(document).ready(function(e) {
+	cw = $(window).width();
+	//cw = 480;
+
+	addContainerList();
+});
+
+function addContainerList(){
+
+	var apps=null;
+	apps = eval(data.categories);
+	console.log(apps.length);
+	for(i=0;i<apps.length;i++){
+		var vThumb=document.createElement("div");
+		var vLink = document.createElement("a");
+		var vImg=document.createElement("img");
+		vThumb.setAttribute("class","thumb1");
+		var linkLog="http://www.uichange.com/ums3-client2/app/f/category/cid"+apps[i].id+"/newest";
+		$(vLink).attr("href",linkLog);
+		
+		vImg.src="http://www.uichange.com/ums3-client2/files/"+apps[i].icon;
+		
+		
+		vLink.appendChild(vImg);
+		
+		vThumb.appendChild(vLink);
+		
+		var vAddContainers=document.getElementById("wrapper");
+		vAddContainers.appendChild(vThumb);
+		
+		$(".wrapper").css("padding-left",cw*4/480);
+		$(".wrapper").css("padding-right",cw*4/480);
+		$(".wrapper").css("padding-top",cw*10/480);
+		$(".thumb1").css("height",cw*153/480);
+	}
+};
+</script>
+</html>

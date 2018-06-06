@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.WorkDao">
+
+	<resultMap type="Work" id="standardWorkMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="memberId" column="member_id" javaType="String" jdbcType="VARCHAR"/>
+		<result property="nickname" column="nickname" javaType="String" jdbcType="VARCHAR"/>
+		<result property="descr" column="descr" javaType="String" jdbcType="VARCHAR"/>
+		<result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+		<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
+		<result property="favor" column="favor" javaType="Long" jdbcType="BIGINT"/>
+		<result property="visitor" column="visitor" javaType="Long" jdbcType="BIGINT"/>
+		<result property="comments" column="comments" javaType="Long" jdbcType="BIGINT"/>
+		<result property="info1" column="info1" javaType="String" jdbcType="VARCHAR"/>
+		<result property="info2" column="info2" javaType="String" jdbcType="VARCHAR"/>
+		<result property="shared" column="shared" javaType="String" jdbcType="VARCHAR"/>
+		<result property="memberPic" column="pic" javaType="String" jdbcType="VARCHAR"/>
+		<result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="getAllWithPage" resultMap="standardWorkMap" >
+		SELECT f.*, u.pic FROM member_work f left join member_user u on f.member_id = u.id WHERE f.status = 0 order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getAllByUserWithPage" resultMap="standardWorkMap" >
+		SELECT f.* FROM member_work f WHERE f.status = 0 and f.uid is not null order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByMemberWithPage" resultMap="standardWorkMap" >
+		SELECT f.*, u.pic FROM member_work f left join member_user u on f.member_id = u.id WHERE f.status = 0 and u.id=#{memberId} order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByMemberWithPageWithoutUid" resultMap="standardWorkMap" >
+		SELECT f.*, u.pic FROM member_work f left join member_user u on f.member_id = u.id WHERE f.status = 0 and u.id=#{memberId} and f.uid is null order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByUserWithPage" resultMap="standardWorkMap" >
+		SELECT f.* FROM member_work f WHERE f.status = 0 and f.uid=#{uid} order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getByLoginNameWithPage" resultMap="standardWorkMap" >
+		SELECT f.*, u.pic FROM member_work f left join member_user u on f.member_id = u.id WHERE f.status = 0 and u.login_name=#{loginName} and u.type=#{type} order by create_date desc limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<insert id="save" parameterType="Work" >
+		insert into member_work(id, name,member_id, uid, nickname,descr, create_date, status, favor, visitor, comments, info1, info2, shared, is_delete) values(#{id}, #{name},#{memberId}, #{uid}, #{nickname},#{descr}, #{createDate}, #{status}, #{favor}, #{visitor}, #{comments}, #{info1}, #{info2}, #{shared}, 0);
+	</insert>
+	
+	<insert id="updateUid">
+		update member_work set uid = #{uid} where member_id = #{mid} and uid is not null;
+	</insert>
+
+</mapper>

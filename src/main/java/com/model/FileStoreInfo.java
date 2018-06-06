@@ -1,0 +1,127 @@
+package com.model;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+/**
+ * 文件在市场上的信息实体
+ */
+public class FileStoreInfo extends IdEntity {
+    private static final long serialVersionUID = 1L;
+    private String title;
+    private String shortDescription;
+    private String longDescription;
+    private String author;
+    private Long price;
+    private String language;
+    private Long fiId;
+    private ThemeFile theme;
+    private Store store;
+    private Long offset;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public ThemeFile getTheme() {
+        return theme;
+    }
+
+    public void setTheme(ThemeFile theme) {
+        this.theme = theme;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Long getFiId() {
+        return fiId;
+    }
+
+    public void setFiId(Long fiId) {
+        this.fiId = fiId;
+    }
+
+    public Long getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Long offset) {
+        this.offset = offset;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        FileStoreInfo that = (FileStoreInfo) obj;
+        return that.getId().equals(this.getId()) && that.getLanguage().equals(this.getLanguage());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 37;
+        result = result * 17 + id.hashCode();
+        result = result * 17 + title.hashCode();
+        result = result * 17 + shortDescription.hashCode();
+        result = result * 17 + longDescription.hashCode();
+        result = result * 17 + author.hashCode();
+        result = result * 17 + language.hashCode();
+        return result;
+    }
+
+}

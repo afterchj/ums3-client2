@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AdvertisementDao">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true"> 
+        <property name="timeToIdleSeconds" value="30"/><!--30s-->
+        <property name="timeToLiveSeconds" value="60"/><!--60s-->
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache>
+	<resultMap type="Advertisement" id="standardAdvertisementMap">
+		<id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="link" column="link" javaType="String" jdbcType="VARCHAR"/>
+		<result property="imgLink" column="img_link" javaType="String" jdbcType="VARCHAR"/>
+		<result property="imgExt" column="img_ext" javaType="String" jdbcType="VARCHAR"/>
+		<result property="imgName" column="img_name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="sort" column="sort" javaType="String" jdbcType="VARCHAR"/>
+		<result property="status" column="status" javaType="Long" jdbcType="INTEGER"/>
+		<result property="dtype" column="dtype" javaType="String" jdbcType="VARCHAR"/>
+		<result property="store" column="store" javaType="String" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<select id="getByType" resultMap="standardAdvertisementMap" parameterType="string">
+		SELECT * FROM f_advertisement f WHERE f.status = 1 AND store = "lock" AND dtype=#{type } order by sort asc
+	</select>
+	
+	<select id="getClientAds" resultMap="standardAdvertisementMap" >
+		SELECT * FROM f_advertisement f WHERE f.status = 1 AND store = "lock" AND dtype='client' order by sort asc
+	</select>
+
+</mapper>

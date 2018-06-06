@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.LogForStoreDao">
+
+	<insert id="save" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id" statementType="STATEMENT">  
+		insert into log_f_store_${tableName}(imei,imsi,store_type, down_type, language, client_version, resolution, from_market, request_method, request_params, create_time, app_name) values
+		<foreach collection="logForStores" separator="," index="index" item="obj">
+			('${obj['imei']}','${obj['imsi']}','${obj['storeType']}','${obj['downType']}','${obj['language']}','${obj['clientVersion']}','${obj['resolution']}','${obj['fromMarket']}','${obj['requestMethod']}','${obj['requestParams']}','${obj['createTime']}','${obj['appName']}')
+		</foreach>
+	</insert>
+
+</mapper>

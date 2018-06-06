@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MemberDao">
+
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true" eviction="LRU" size="2048"> 
+        <property name="timeToIdleSeconds" value="10"/>
+        <property name="timeToLiveSeconds" value="30"/>
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache> -->
+
+	<resultMap type="Member" id="standardMemberMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+		<result property="loginName" column="login_name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="descr" column="descr" javaType="String" jdbcType="VARCHAR"/>
+		<result property="pic" column="pic" javaType="String" jdbcType="VARCHAR"/>
+		<result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+		<result property="nickname" column="nickname" javaType="String" jdbcType="VARCHAR"/>
+		<result property="info1" column="info1" javaType="String" jdbcType="VARCHAR"/>
+		<result property="info2" column="info2" javaType="String" jdbcType="VARCHAR"/>
+		<result property="type" column="type" javaType="String" jdbcType="VARCHAR"/>
+		<result property="birthday" column="birthday" javaType="String" jdbcType="VARCHAR"/>
+		<result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+		<result property="realName" column="real_name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="email" column="email" javaType="String" jdbcType="VARCHAR"/>
+		<result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+		<result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+		<result property="loginDate" column="login_date" javaType="Date" jdbcType="TIMESTAMP"/>
+		<result property="allowComment" column="allow_comment" javaType="Integer" jdbcType="INTEGER"/>
+		<result property="allowPost" column="allow_post" javaType="Integer" jdbcType="INTEGER"/>
+		<result property="gender" column="gender" javaType="Integer" jdbcType="INTEGER"/>
+		<result property="visitor" column="visitor" javaType="Long" jdbcType="BIGINT"/>
+	</resultMap>
+
+	<select id="getByLoginName" resultMap="standardMemberMap" >
+		select SQL_NO_CACHE * from member_user c where c.login_name = #{loginName} and c.type=#{type};
+	</select>
+	
+	<select id="getTotalCountWithoutUid" resultType="Long" >
+		select count(*) from member_user c where c.id is null;
+	</select>
+	
+	<select id="getAllWithPageWithoutUid" resultMap="standardMemberMap">
+		select * from member_user where id is null limit #{startIndex}, #{pageSize};
+	</select>
+	
+	<select id="getById" resultMap="standardMemberMap" parameterType="String">
+		select * from member_user c where c.id=#{id};
+	</select>
+	
+	<insert id="save" parameterType="Member" >
+		insert into member_user(id, pic, login_name,descr,nickname,info1, info2, type, birthday, qq, real_name, email, mobile, create_date, login_date, allow_comment, allow_post, gender, visitor, uid) values(#{id}, #{pic}, #{loginName},#{descr},#{nickname},#{info1}, #{info2}, #{type}, #{birthday}, #{qq}, #{realName}, #{email}, #{mobile}, #{createDate}, #{loginDate}, #{allowComment}, #{allowPost}, #{gender}, #{visitor}, #{uid});
+	</insert>
+	
+	<update id="update" parameterType="Member">
+	  update member_user
+	    <set>
+	      <if test="descr != null">descr=#{descr},</if>
+	      <if test="loginDate != null">login_date=#{loginDate},</if>
+	      <if test="pic != null">pic=#{pic},</if>
+	      <if test="nickname != null">nickname=#{nickname},</if>
+	      <if test="realName != null">real_name=#{realName},</if>
+	      <if test="gender != null">gender=#{gender},</if>
+	      <if test="email != null">email=#{email},</if>
+	      <if test="mobile != null">mobile=#{mobile},</if>
+	      <if test="qq != null">qq=#{qq},</if>
+	      <if test="birthday != null">birthday=#{birthday},</if>
+	      <if test="uid != null">uid=#{uid}</if>
+	    </set>
+	  where id=#{id}
+	</update>
+	
+	<update id="updateUid" parameterType="Member">
+	  	update member_user set uid=#{uid} where id=#{id} and uid is null;
+	</update>
+
+</mapper>

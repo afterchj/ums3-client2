@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.CategoryDao">
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache" readOnly="true"> 
+        <property name="timeToIdleSeconds" value="30"/><!--30s-->
+        <property name="timeToLiveSeconds" value="60"/><!--60s-->
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>
+    </cache>
+	<resultMap type="Category" id="standardCategoryMap">
+		<id property="id" column="id" javaType="Long" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+		<result property="value" column="value" javaType="String" jdbcType="VARCHAR"/>
+		<result property="icon" column="icon" javaType="String" jdbcType="VARCHAR"/>
+		<result property="description" column="description" javaType="String" jdbcType="VARCHAR"/>
+		<result property="dtype" column="dtype" javaType="String" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="getAll" resultMap="standardCategoryMap">
+		select * from f_category c where c.dtype='category' order by c.value asc
+	</select>
+	
+	<select id="getAllByCategory" resultMap="standardCategoryMap">
+		select * from f_category c where c.dtype='category' order by c.value asc
+	</select>
+	
+	<select id="get" resultMap="standardCategoryMap" parameterType="string">
+		select * from f_category c where c.id = #{id} ;
+	</select>
+
+</mapper>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+    <context:component-scan base-package="com.web"/>
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <!--国际化资源 -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>conf/i18n/messages</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <!-- <bean class="com.baobaotao.domain.StringToUserConverter" /> -->
+            </list>
+        </property>
+    </bean>
+
+    <bean
+            class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!-- 定义默认的异常处理页面，当该异常类型的注册时使用 -->
+        <property name="defaultErrorView" value="error/500"></property>
+        <!-- 定义异常处理页面用来获取异常信息的变量名，默认名为exception -->
+        <property name="exceptionAttribute" value="ex"></property>
+        <!-- 定义需要特殊处理的异常，用类名或完全路径名作为key，异常也页名作为值 -->
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.beans.ConversionNotSupportedException">error/500</prop>
+                <prop
+                        key="org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException">
+                    error/404
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean
+            class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"
+            p:messageConverters-ref="messageConverters">
+        <!-- <property name="webBindingInitializer"> <bean class="" /> </property> -->
+    </bean>
+
+    <util:list id="messageConverters">
+        <bean
+                class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+        <bean
+                class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+        <bean
+                class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"/>
+        <bean
+                class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"
+                p:marshaller-ref="xmlMarshaller" p:unmarshaller-ref="xmlMarshaller">
+        </bean>
+        <bean
+                class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+    </util:list>
+
+    <bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+        <property name="streamDriver">
+            <bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>
+        </property>
+        <property name="autodetectAnnotations" value="true"/>
+        <!-- <property name="supportedClasses"> <list> <value>com.web.vo.AdVo</value>
+            <value>com.web.vo.AdVoList</value> </list> </property> -->
+    </bean>
+
+    <!-- Excel视图解析器配置 -->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+          p:order="10"/>
+
+    <bean id="excelView" class="com.web.view.MyExcelListView"/>
+    <bean id="configFileView" class="com.web.view.GenericFileView"
+          p:contentType="text/plain" p:url="" scope="prototype"/>
+    <bean id="swfFileView" class="com.web.view.GenericFileView"
+          p:contentType="application/x-shockwave-flash" p:url="" scope="prototype"/>
+
+    <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+            p:order="100" p:viewClass="org.springframework.web.servlet.view.JstlView"
+            p:prefix="/WEB-INF/views/" p:suffix=".jsp"/>
+
+    <!-- 自定义多视图解析器，根据请求后缀调用相应的视图解析器 -->
+    <bean id="multipleViewResolver" class="com.web.view.viewresolver.MultipleViewResolver"
+          p:order="0">
+        <property name="resolvers">
+            <map>
+                <entry key="config,txt">
+                    <bean class="com.web.view.viewresolver.GenericFileViewResolver"
+                          p:location="/WEB-INF/config/" p:cache="false">
+                        <property name="viewName" value="configFileView"/>
+                    </bean>
+                </entry>
+                <entry key="swf">
+                    <bean class="com.web.view.viewresolver.GenericFileViewResolver"
+                          p:location="/WEB-INF/swf/" p:cache="false">
+                        <property name="viewName" value="swfFileView"/>
+                    </bean>
+                </entry>
+                <entry key="ftl">
+                    <bean id="freeMarkerResolver"
+                          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+                          p:order="2">
+                        <property name="viewClass"
+                                  value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+                        <property name="contentType" value="text/html;charset=UTF-8"/>
+                        <property name="exposeRequestAttributes" value="true"/>
+                        <property name="exposeSessionAttributes" value="true"/>
+                        <property name="exposeSpringMacroHelpers" value="true"/>
+                    </bean>
+                </entry>
+                <!-- <entry key="jasper"> Jasper Report 视图 <bean id="jasperReportsViewResolver"
+                    class="org.springframework.web.servlet.view.jasperreports.JasperReportsViewResolver"
+                    p:viewClass="com.scinvest.util.support.JasperView" p:requestContextAttribute="rc"
+                    p:prefix="/WEB-INF/reportView/"> dataSources参数的key <property name="reportDataKey">
+                    <value>datasource</value> </property> <property name="exporterParameters">
+                    <map> 参数对于生成html时，jasperReport查找图片的位置 <entry key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IMAGES_URI">
+                    <value>#{rpe.resourceRoot}/images/reports/</value> </entry> <entry key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.CHARACTER_ENCODING">
+                    <value>UTF-8</value> </entry> <entry key="net.sf.jasperreports.engine.export.JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET">
+                    <bean id="java.lang.Boolean.TRUE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"
+                    /> </entry> </map> </property> </bean> </entry> -->
+                <entry key="jsp">
+                    <bean id="defaultViewResolver"
+                          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                        <property name="viewClass"
+                                  value="org.springframework.web.servlet.view.JstlView"/>
+                        <property name="contentType" value="text/html"/>
+                        <property name="prefix" value="/WEB-INF/views/"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 协商多种视图解析器 -->
+    <bean
+            class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
+            p:order="1" p:ignoreAcceptHeader="true" p:favorPathExtension="true"
+            p:favorParameter="false" p:defaultContentType="text/html">
+        <property name="mediaTypes">
+            <map>
+                <entry key="html" value="text/html"/>
+                <!-- <entry key="xml" value="application/xml" /> -->
+                <entry key="json" value="application/json"/>
+            </map>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!-- <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"
+                    p:renderedAttributes="jsonObject" /> <bean class="org.springframework.web.servlet.view.xml.MarshallingView"
+                    p:modelKey="xmlObject" p:marshaller-ref="xmlMarshaller" /> -->
+
+                <!-- <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"
+                    /> -->
+                <bean class="com.web.view.MyEncryptedMappingJacksonJsonView"/>
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller" ref="xmlMarshaller"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="UTF-8" p:maxUploadSize="5242880" p:uploadTempDir="upload/temp"/>
+
+    <!-- 本地化解析 -->
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+          p:cookieName="clientLanguage" p:cookieMaxAge="100000" p:cookiePath="/"
+          p:defaultLocale="zh_CN"/>
+
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/public/**"/>
+            <mvc:exclude-mapping path="/app/**"/>
+            <mvc:exclude-mapping path="/goods/**"/>
+            <mvc:exclude-mapping path="/redirect/**"/>
+            <mvc:exclude-mapping path="/spfile/hottest/**"/>
+            <mvc:exclude-mapping path="/spfile/newest/**"/>
+            <mvc:exclude-mapping path="/spfile/allParentTypes.json"/>
+            <mvc:exclude-mapping path="/spfile/allSubTypes.json"/>
+            <mvc:exclude-mapping path="/spfile/getChildrenTypes/**"/>
+            <mvc:exclude-mapping path="/spfile/getNewTypeByNewId/**"/>
+            <bean class="com.web.interceptor.ParamsEncryptInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/public/**"/>
+            <mvc:exclude-mapping path="/account/**"/>
+            <mvc:exclude-mapping path="/app/**"/>
+            <mvc:exclude-mapping path="/goods/**"/>
+            <mvc:exclude-mapping path="/redirect/**"/>
+            <mvc:exclude-mapping path="/update/**"/>
+            <mvc:exclude-mapping path="/account/pwd/retrieve"/>
+            <mvc:exclude-mapping path="/zone/work/square"/>
+            <mvc:exclude-mapping path="/zone/work/square/**"/>
+            <mvc:exclude-mapping path="/logCountStore/**"/>
+            <mvc:exclude-mapping path="/spfile/**"/>
+            <mvc:exclude-mapping path="/sptopic/**"/>
+            <bean class="com.web.interceptor.UserTokenValidationInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/app/**"/>
+            <bean class="org.springframework.web.servlet.mvc.WebContentInterceptor"
+                  p:cacheSeconds="300" p:alwaysUseFullPath="true" p:useExpiresHeader="true"
+                  p:useCacheControlHeader="true" p:useCacheControlNoStore="true">
+                <property name="cacheMappings">
+                    <props>
+                        <!-- cache for One hour -->
+                        <prop key="/app/*/details/**">3600</prop>
+                        <prop key="/app/*/hottest/**">3600</prop>
+                        <prop key="/app/*/home">300</prop>
+                        <prop key="/app/sphome*">300</prop>
+                        <prop key="/app/home*">300</prop>
+                        <prop key="/app/work">10</prop>
+                        <prop key="/app/work/p*">10</prop>
+                        <prop key="/app/dd/client">3600</prop>
+                        <prop key="/app/work/mid*">-1</prop>
+                        <prop key="/app/work/mid*/p*">-1</prop>
+                        <prop key="/app/work/release">-1</prop>
+                        <prop key="/app/member/**">-1</prop>
+                    </props>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <!-- 静态资源映射 -->
+    <mvc:default-servlet-handler/>
+    <!-- <bean id="rpe" class="com.baobaotao.web.ResourcePathExposer" init-method="init"
+        /> -->
+    <mvc:resources mapping="/public/**" location="/#{rpe.resourceRoot}/"
+                   cache-period="31536000"/>
+
+</beans>
