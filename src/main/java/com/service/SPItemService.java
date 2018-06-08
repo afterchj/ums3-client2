@@ -17,5 +17,4 @@ public interface SPItemService {
 
     List<SPFile> getInfo(Integer id) throws Exception;
 
-    List<SPItem> getNewId(String id) throws Exception;
 }

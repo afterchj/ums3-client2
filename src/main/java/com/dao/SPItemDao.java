@@ -19,5 +19,4 @@ public interface SPItemDao {
 
     List<SPFile> subTypeInfo(@Param(value = "id") Integer id) throws Exception;
 
-    List<SPItem> getNewId(@Param(value = "id") String id);
 }

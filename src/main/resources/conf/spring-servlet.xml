@@ -199,7 +199,7 @@
             <mvc:exclude-mapping path="/spfile/allParentTypes.json"/>
             <mvc:exclude-mapping path="/spfile/allSubTypes.json"/>
             <mvc:exclude-mapping path="/spfile/getChildrenTypes/**"/>
-            <mvc:exclude-mapping path="/spfile/getNewTypeByNewId/**"/>
+            <mvc:exclude-mapping path="/home/getHPFeatured.json"/>
             <bean class="com.web.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
@@ -217,6 +217,7 @@
             <mvc:exclude-mapping path="/logCountStore/**"/>
             <mvc:exclude-mapping path="/spfile/**"/>
             <mvc:exclude-mapping path="/sptopic/**"/>
+            <mvc:exclude-mapping path="/home/**"/>
             <bean class="com.web.interceptor.UserTokenValidationInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>

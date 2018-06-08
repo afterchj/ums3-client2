@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.HPFeaturedDao">
+
+    <resultMap type="HPFeatured" id="featuredType">
+        <id property="id" column="id" javaType="long" jdbcType="BIGINT"/>
+        <result property="link" column="new_id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="img_link" column="img_link" javaType="String" jdbcType="VARCHAR"/>
+        <result property="create_time" column="create_time" javaType="java.sql.Date" jdbcType="DATE"/>
+        <result property="description" column="description" javaType="String" jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="int" jdbcType="INTEGER"/>
+        <result property="dtype" column="dtype" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getHPFeatured" resultMap="featuredType">
+        select * FROM sp_advertisement WHERE dtype='newRecommend' ORDER BY id DESC;
+    </select>
+
+</mapper>

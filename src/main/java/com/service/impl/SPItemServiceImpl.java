@@ -38,9 +38,5 @@ public class SPItemServiceImpl implements SPItemService {
         return spItemDao.subTypeInfo(id);
     }
 
-    @Override
-    public List<SPItem> getNewId(String id) {
-        return spItemDao.getNewId(id);
-    }
 
 }

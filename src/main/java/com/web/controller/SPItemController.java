@@ -87,24 +87,4 @@ public class SPItemController extends BaseDecodedController {
         return result;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/getNewTypeByNewId/newId{id}", produces = "application/json; charset=utf-8")
-    public Map<String, Object> getNewTypeByNewId(@PathVariable("id") String id){
-        Map<String, Object> result = new HashedMap();
-        List<SPItem> list = null;
-        try {
-            list = itemService.getNewId(id);
-        } catch (Exception e) {
-            System.err.println(e.getCause());
-            result.put("result", ResultDict.SYSTEM_ERROR.getCode());
-        }
-        if (list.size() > 0) {
-            result.put("data", list);
-            result.put("result", ResultDict.SUCCESS.getCode());
-        } else {
-            result.put("result", ResultDict.SYSTEM_ERROR.getCode());
-        }
-        return result;
-    }
-
 }
