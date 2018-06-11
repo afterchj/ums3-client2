@@ -69,26 +69,6 @@ public class TaskControllerTest {
 		return oldVerDataInfo;
 	}
 
-	@Test
-	public void getNewTypeByNewId(){
-		SPItemDao spItemDao = ctx.getBean("spItemDao", SPItemDao.class);
-		Map<String, Object> result = new HashedMap();
-		List<SPItem> list = null;
-		try {
-			list = spItemDao.getNewId("12sued4s39s1");
-		} catch (Exception e) {
-			System.err.println(e.getCause());
-			result.put("result", ResultDict.SYSTEM_ERROR.getCode());
-		}
-		if (list.size() > 0) {
-			result.put("data", list);
-			result.put("result", ResultDict.SUCCESS.getCode());
-		} else {
-			result.put("result", ResultDict.SYSTEM_ERROR.getCode());
-		}
-		for (SPItem sp:list){
-			System.out.println(sp.getStatus()+":"+sp.getNewId()+":"+sp.getName());
-		}
-	}
+
 
 }

@@ -15,7 +15,7 @@
     </resultMap>
 
     <select id="getHPFeatured" resultMap="featuredType">
-        select * FROM sp_advertisement WHERE dtype='newRecommend' ORDER BY id DESC;
+        select * FROM sp_advertisement WHERE dtype='newRecommend' ORDER BY sort;
     </select>
 
 </mapper>
