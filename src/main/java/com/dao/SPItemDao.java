@@ -18,4 +18,5 @@ public interface SPItemDao {
     List<SPItem> getParentTypes();
 
     List<SPFile> subTypeInfo(@Param(value = "id") Integer id) throws Exception;
+
 }

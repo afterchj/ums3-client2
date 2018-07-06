@@ -19,11 +19,11 @@
 	<dubbo:application name="ums3-client2" />
 
 
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+	<bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource"
 		  init-method="init" destroy-method="close">
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+		<property name="url" value="${jdbc.url2}" />
+		<property name="username" value="${jdbc.username2}" />
+		<property name="password" value="${jdbc.password2}" />
 		<property name="initialSize" value="${jdbc.minsize}" />
 		<property name="minIdle" value="${jdbc.minIdle}" />
 		<property name="maxActive" value="${jdbc.maxsize}" />
@@ -38,6 +38,19 @@
 		<property name="filters" value="stat" />
 	</bean>
 
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource2" />
+		<property name="mapperLocations" value="classpath:mapper/*Mapper.xml" />
+		<property name="typeAliasesPackage" value="com.model" />
+		<property name="configLocation" value="classpath:/conf/mybatisConfig.xml" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		  p:sqlSessionFactoryBeanName="sqlSessionFactory2" p:basePackage="com.dao" />
+
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory2"></constructor-arg>
+	</bean>
 
 	<!-- 业务使用 -->
 	<dubbo:reference id="accountManager" version="0.3.0"
@@ -84,8 +97,8 @@
 				<ref bean="updateGoodsStockAndSalesTrigger"/>
 				<ref bean="updateMemberByFillingUidTrigger"/>
 				<ref bean="generateTasksTrigger"/>
-				<ref bean="refreshIntoLogCountStoreTrigger"/>
-				<ref bean="refreshIntoSPFileDownloadTrigger"/>
+				<!--<ref bean="refreshIntoLogCountStoreTrigger"/>-->
+				<!--<ref bean="refreshIntoSPFileDownloadTrigger"/>-->
 			</list>
 		</property>
 		<property name="taskExecutor" ref="executor" />
@@ -131,29 +144,29 @@
 	</bean>
 
 	<!--配置自动刷新数据-->
-	<bean id="refreshIntoLogCountStoreJob"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="logCountStoreService" />
-		<property name="targetMethod" value="refreshIntoLogCountStore" />
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="refreshIntoLogCountStoreTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="refreshIntoLogCountStoreJob" />
-		<property name="cronExpression" value="0 0 22 * * ?" />
-	</bean>
+	<!--<bean id="refreshIntoLogCountStoreJob"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject" ref="logCountStoreService" />-->
+		<!--<property name="targetMethod" value="refreshIntoLogCountStore" />-->
+		<!--<property name="concurrent" value="false" />-->
+	<!--</bean>-->
+	<!--<bean id="refreshIntoLogCountStoreTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+		<!--<property name="jobDetail" ref="refreshIntoLogCountStoreJob" />-->
+		<!--<property name="cronExpression" value="0 0 22 * * ?" />-->
+	<!--</bean>-->
 
 
 	<!--配置视频文件日志自动刷新-->
-	<bean id="refreshIntoSPFileDownloadJob"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="spFileDownloadService" />
-		<property name="targetMethod" value="refreshIntoSpFileDownload" />
-		<property name="concurrent" value="false" />
-	</bean>
-	<bean id="refreshIntoSPFileDownloadTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="refreshIntoSPFileDownloadJob" />
-		<property name="cronExpression" value="0 0 23 * * ?" />
-	</bean>
+	<!--<bean id="refreshIntoSPFileDownloadJob"-->
+		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject" ref="spFileDownloadService" />-->
+		<!--<property name="targetMethod" value="refreshIntoSpFileDownload" />-->
+		<!--<property name="concurrent" value="false" />-->
+	<!--</bean>-->
+	<!--<bean id="refreshIntoSPFileDownloadTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+		<!--<property name="jobDetail" ref="refreshIntoSPFileDownloadJob" />-->
+		<!--<property name="cronExpression" value="0 0 23 * * ?" />-->
+	<!--</bean>-->
 
 	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
 	<cache:annotation-driven cache-manager="cacheManager" />
@@ -270,7 +283,7 @@
         </property>
     </bean>
 
-	<beans profile="development">
+	<!--<beans profile="development">
 	<bean id="jedisConnFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
@@ -298,15 +311,15 @@
 			<property name="poolPreparedStatements" value="false" />
 			<property name="filters" value="stat" />
 		</bean>
-	</beans>
+	</beans>-->
 
-	<beans profile="test">
+	<!--<beans profile="test">
 	<bean id="jedisConnFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
           p:usePool="true">
     </bean>
-		<!-- 设置属性文件位置 -->
+		&lt;!&ndash; 设置属性文件位置 &ndash;&gt;
 		<context:property-placeholder
 			ignore-resource-not-found="true"
 			location="classpath*:/setup.properties, classpath*:/setup.test.properties" />
@@ -329,7 +342,7 @@
 			<property name="poolPreparedStatements" value="false" />
 			<property name="filters" value="stat" />
 		</bean>
-	</beans>
+	</beans>-->
 
 	<beans profile="production">
 	<bean id="jedisConnFactory"
@@ -362,7 +375,7 @@
 		</bean>
 	</beans>
 
-	<beans profile="demo">
+	<!--<beans profile="demo">
 	<bean id="jedisConnFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
@@ -422,7 +435,7 @@
 			<property name="poolPreparedStatements" value="false" />
 			<property name="filters" value="stat" />
 		</bean>
-	</beans>
+	</beans>-->
 </beans>
 
 

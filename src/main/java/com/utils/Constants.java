@@ -28,6 +28,8 @@ public class Constants {
 	
 	//服务器tomcat布置地址.
 	public static String TOMCAT_SHOW;
+
+	public static String HEADS_STORAGE;
 	
 	public static final Integer CACHE_MEMCACHED_TIMEOUT = propertiesLoader.getInteger("cache.memcached.timeout", 300);
 	

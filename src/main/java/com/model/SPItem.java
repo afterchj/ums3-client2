@@ -15,6 +15,15 @@ public class SPItem implements Serializable{
     private String dtype;
     private int status;
     private int parentId;
+    private String newId;
+
+    public String getNewId() {
+        return newId;
+    }
+
+    public void setNewId(String newId) {
+        this.newId = newId;
+    }
 
     public int getId() {
         return id;

@@ -18,7 +18,7 @@ import static jxl.biff.FormatRecord.logger;
  */
 @Service("spFileService")
 public class SPFileServiceImpl implements SPFileService {
-    public static final int SIZE = 12;
+    public static final int SIZE = 24;
     @Resource(name = "spFileDao")
     private SPFileDao spFileDao;
 

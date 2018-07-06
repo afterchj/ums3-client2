@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.SPFileDownloadDao">
-    <resultMap type="com.model.SPFileDownload" id="standardSPFileDownloadMap">
-        <id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>
-        <result property="createDate" column="createDate" javaType="Date" jdbcType="TIMESTAMP"/>
-        <result property="logDate" column="logDate" javaType="String" jdbcType="VARCHAR"/>
-        <result property="fileId" column="fileId" javaType="Integer" jdbcType="INTEGER"/>
-        <result property="totalDownload" column="totalDownload" javaType="Integer" jdbcType="INTEGER"/>
-        <result property="totalVisit" column="totalVisit" javaType="Integer" jdbcType="INTEGER"/>
-    </resultMap>
+    <!--<resultMap type="com.model.SPFileDownload" id="standardSPFileDownloadMap">-->
+    <!--<id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>-->
+    <!--<result property="createDate" column="createDate" javaType="Date" jdbcType="TIMESTAMP"/>-->
+    <!--<result property="logDate" column="logDate" javaType="String" jdbcType="VARCHAR"/>-->
+    <!--<result property="fileId" column="fileId" javaType="Integer" jdbcType="INTEGER"/>-->
+    <!--<result property="totalDownload" column="totalDownload" javaType="Integer" jdbcType="INTEGER"/>-->
+    <!--<result property="totalVisit" column="totalVisit" javaType="Integer" jdbcType="INTEGER"/>-->
+    <!--</resultMap>-->
 
     <insert id="refreshIntoSpFileDownload">
         INSERT INTO mopita.sp_file_download (
@@ -34,14 +34,15 @@
 
     <insert id="updateTotalDownload">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            SELECT count(*) FROM mopita.sp_file_download t WHERE t.file_id=#{fileId} AND t.log_date=#{logDate}
+            SELECT count(*) FROM mopita.sp_file_download t WHERE t.file_id=#{fileId}
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.sp_file_download f
             SET f.total_download = total_download + 1
             WHERE
-            f.log_date = #{logDate}
-            AND f.file_id = #{fileId}
+            -- f.log_date = #{logDate}
+            -- AND
+            f.file_id = #{fileId}
         </if>
         <if test="count==0">
             INSERT INTO mopita.sp_file_download (

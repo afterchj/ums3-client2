@@ -84,7 +84,7 @@ public class SPFileController extends BaseDecodedController {
     }
 
 
-    //统计视频文件下载量
+    //更新视频文件下载量
     @RequestMapping(value = "/totalDownload", method = RequestMethod.POST)
     public String updateTotalDown(@ModelAttribute("decodedParams") JSONObject params, ModelMap model) {
         Integer fileId = params.getInteger("fileId");
@@ -95,6 +95,7 @@ public class SPFileController extends BaseDecodedController {
         } catch (Exception e) {
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         }
+
         return null;
     }
 

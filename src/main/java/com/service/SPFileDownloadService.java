@@ -7,4 +7,6 @@ package com.service;
 public interface SPFileDownloadService {
     //更新主题下载量
     void updateTotalDown(Integer fileId, String logDate);
+
+    void refreshIntoSpFileDownload();
 }

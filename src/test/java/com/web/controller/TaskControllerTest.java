@@ -3,16 +3,29 @@ package com.web.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.dao.SPItemDao;
+import com.model.SPItem;
+import com.model.dd.ResultDict;
+import com.service.SPItemService;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.utils.Constants;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TaskControllerTest {
+	static  ClassPathXmlApplicationContext ctx;
+	 static  {
+		 ctx = new ClassPathXmlApplicationContext("conf/beans.xml", "conf/spring-servlet.xml");
+	}
+
 
 	@Test
 	public void test() {
@@ -55,5 +68,7 @@ public class TaskControllerTest {
 		oldVerDataInfo.put("f4ca48cf5df2477eb7fe67780fdcd1ac", dataInfo);
 		return oldVerDataInfo;
 	}
+
+
 
 }

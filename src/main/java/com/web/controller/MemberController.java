@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.service.MemberService;
 import com.utils.LoggerUtils;
 import com.web.vo.LoginVo;
@@ -18,12 +17,12 @@ public class MemberController extends BaseController{
 
 	private MemberService memberService;
 	private Logger system = LoggerUtils.SYSTEM;
-	
+
 	@Autowired
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	@RequestMapping("/member/login")
 	public String login(@RequestParam(value="params", required=false)String params, ModelMap model) throws Exception {
 		if(StringUtils.isBlank(params)){

@@ -11,6 +11,7 @@
         <result property="description" column="description" javaType="String" jdbcType="VARCHAR"/>
         <result property="status" column="status" javaType="int" jdbcType="INTEGER"/>
         <result property="parentId" column="parent_id" javaType="int" jdbcType="TIMESTAMP"/>
+        <result property="newId" column="newId" javaType="String" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap type="SPFile" id="typeInfo">
@@ -31,18 +32,19 @@
     </resultMap>
 
     <select id="getParentTypes" resultMap="videoType">
-		select * from sp_category where dtype='parent' and status =0
+		select * from sp_category where dtype='parent'
 	</select>
 
     <select id="getSubTypes" resultMap="videoType" parameterType="string">
-		select * from sp_category where dtype='children' and status =0
+		select * from sp_category where dtype='children'
 	</select>
 
     <select id="getSubTypesById" resultMap="videoType" parameterType="int">
-        select sc.* from sp_category sp join sp_category sc on sp.id=sc.parent_id and sp.id=#{id} and sc.status =0
+        select sc.* from sp_category sp join sp_category sc on sp.id=sc.parent_id and sp.id=#{id}
     </select>
 
     <select id="subTypeInfo" resultMap="typeInfo" parameterType="int">
-      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id} and sf.is_delete=0 ORDER BY sf.modify_time DESC
+      SELECT sf.* from sp_category sp join sp_category_file sc on sp.id=sc.category_id JOIN sp_file sf on sf.id=sc.file_id and sp.id=#{id}  ORDER BY sf.modify_time DESC
     </select>
+
 </mapper>
