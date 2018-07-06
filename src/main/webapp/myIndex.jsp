@@ -21,9 +21,9 @@
 <h1>springMVC包装类上传文件</h1>
 <form name="userForm2" action="heads/upload" enctype="multipart/form-data" method="post">
     <div id="newUpload2">
-        <input id="file" type="file" name="file" onchange="setValue()"><br>
+        <input id="file" type="file" name="file"><br>
         <input id="name" type="hidden" name="fileName" value="">
-        <%--描述： <input name="desc" type="text">--%>
+        描述： <input name="uid" type="text">
     </div>
     <input type="submit" value="上传">
 

@@ -96,8 +96,7 @@ public class FileStoreInfoServiceImpl implements FileStoreInfoService {
 	@Cacheable(value = "fileStoreInfoService", key = "'getHomePage' + #gender")
 	public List<FrontThemeFileVo> getHomePage(String gender) {
 		// return findPage(page, Q_SHELF_THEME_STORE, st, sid, sid, lang);
-		List<FileStoreInfo> fileStoreInfos = fileStoreInfoDao
-				.getHomeByGender(DataDict.getGender(gender));
+		List<FileStoreInfo> fileStoreInfos = fileStoreInfoDao.getHomeByGender(DataDict.getGender(gender));
 		return convertSimplifyFront(fileStoreInfos);
 	}
 

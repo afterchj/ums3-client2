@@ -34,7 +34,7 @@ public class HomeController {
 	@ExceptionHandler(RuntimeException.class)
 	public String handleException(RuntimeException re,
 			HttpServletRequest request) {
-		logger.error("home.", re);
+//		logger.error("home.", re);
 		return null;
 	}
 	

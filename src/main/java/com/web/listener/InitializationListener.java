@@ -25,13 +25,13 @@ public class InitializationListener extends ContextLoader implements ServletCont
 			propertiesLoader.setProperties("classpath:/setup.properties", customPath);
 			Constants.TOMCAT_SHOW = propertiesLoader.getProperty("tomcat.show.location") + "/";
 			Constants.STATIC_SHOW = propertiesLoader.getProperty("static.show.location");
-			Constants.WORK_PIC = new File(propertiesLoader.getProperty("mem.work.pic"));
+		Constants.HEADS_STORAGE=propertiesLoader.getProperty("head.storage");
+		Constants.WORK_PIC = new File(propertiesLoader.getProperty("mem.work.pic"));
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		CacheManager.getInstance().shutdown();
 	}
-
 
 }

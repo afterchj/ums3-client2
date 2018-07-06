@@ -1,6 +1,9 @@
 package com.test;
 
+import com.dao.ClientFileDao;
+import com.dao.FileStoreInfoDao;
 import com.dao.SPFileDownloadDao;
+import com.dao.UpdateHeadDao;
 import com.utils.DateUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,11 +30,13 @@ public class MyBatisUtil {
 
     public static void main(String[] args) {
         SqlSession session = getSess();
+        System.out.println(session.getMapper(FileStoreInfoDao.class).getHomeByGender("m"));
+//        session.getMapper(UpdateHeadDao.class).updateHead("14715689","demo.jpg");
 //        List<SPItem> items = session.getMapper(SPItemDao.class).getParentTypes();
 //        System.out.println(items.size());
 
-        Integer fileId =1543;
-        String logDate = DateUtil.format(new Date(), "yyyy-MM-dd");
-        session.getMapper(SPFileDownloadDao.class).updateTotalDownload(fileId,logDate);
+//        Integer fileId =1543;
+//        String logDate = DateUtil.format(new Date(), "yyyy-MM-dd");
+//        session.getMapper(SPFileDownloadDao.class).updateTotalDownload(fileId,logDate);
     }
 }

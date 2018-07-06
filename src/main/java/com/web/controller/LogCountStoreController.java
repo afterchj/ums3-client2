@@ -3,8 +3,6 @@ package com.web.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.model.dd.ResultDict;
 import com.service.LogCountStoreService;
-import com.tpadsz.exception.NotExecutedDbException;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +19,6 @@ import java.util.Date;
 @Controller("logCountStoreController")
 @RequestMapping("/logCountStore")
 public class LogCountStoreController extends BaseDecodedController {
-    private Logger logger = Logger.getLogger(CategoryController.class);
 
     private LogCountStoreService logCountStoreService;
 
