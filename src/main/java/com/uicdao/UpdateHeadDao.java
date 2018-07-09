@@ -1,4 +1,4 @@
-package com.dao;
+package com.uicdao;
 
 
 import org.apache.ibatis.annotations.Param;
@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface UpdateHeadDao {
     void updateHead(@Param("id") String id, @Param("icon") String icon);
+
+    String getUrl(String id);
 }

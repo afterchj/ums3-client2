@@ -51,7 +51,6 @@ public class UploadFileController extends BaseDecodedController {
         } else {
             uid = params.getString("uid");
         }
-        System.out.println("params=" + params);
         if (StringUtils.isEmpty(uid)) {
             map.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
         }
@@ -82,6 +81,24 @@ public class UploadFileController extends BaseDecodedController {
                     }
                 }
             }
+        }
+        return JSON.toJSONString(map);
+    }
+
+    @ResponseBody
+    @RequestMapping("/download")
+    public String download(@ModelAttribute("decodedParams") JSONObject params, HttpServletRequest request) {
+        Map map = new HashMap();
+        String uid = request.getParameter("uid");
+        if (params != null) {
+            uid = params.getString("uid");
+        }
+        if (StringUtils.isEmpty(uid)) {
+            map.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
+        } else {
+            String icon = headService.getUrl(uid);
+            map.put("headUrl", icon);
+            map.put("result", ResultDict.SUCCESS.getCode());
         }
         return JSON.toJSONString(map);
     }

@@ -1,6 +1,6 @@
 package com.service.impl;
 
-import com.dao.UpdateHeadDao;
+import com.uicdao.UpdateHeadDao;
 import com.service.UpdateHeadService;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,14 @@ import javax.annotation.Resource;
 public class UpdateHeadServiceImpl implements UpdateHeadService {
     @Resource
     private UpdateHeadDao headDao;
+
     @Override
     public void updateHead(String id, String icon) {
-        headDao.updateHead(id,icon);
+        headDao.updateHead(id, icon);
+    }
+
+    @Override
+    public String getUrl(String uid) {
+        return headDao.getUrl(uid);
     }
 }
