@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.model.dd.ResultDict;
 import com.service.UpdateHeadService;
 import com.utils.Constants;
+import com.utils.convert.DBUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Created by hongjian.chen on 2018/6/11.
@@ -37,8 +36,10 @@ public class UploadFileController extends BaseDecodedController {
     public static String headShow = "http://www.uichange.com/ums3-share/user/";
     private Logger logger = Logger.getLogger(UploadFileController.class);
 
-    @Resource
-    UpdateHeadService headService;
+//    @Resource
+//    UpdateHeadService headService;
+
+    DBUtils db = DBUtils.getInstance();
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -46,13 +47,8 @@ public class UploadFileController extends BaseDecodedController {
         Map map = new HashMap();
         String icon;
         String uid = request.getParameter("uid");
-        if (params == null) {
-            logger.error("params is null!" + params + "[uid]=" + uid);
-        } else {
+        if (params != null) {
             uid = params.getString("uid");
-        }
-        if (StringUtils.isEmpty(uid)) {
-            map.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
         }
 //        String savePath = request.getSession().getServletContext().getRealPath("/img/");
         String savePath = Constants.HEADS_STORAGE;
@@ -67,17 +63,23 @@ public class UploadFileController extends BaseDecodedController {
                 if (file != null) {
                     String prefix = UUID.randomUUID().toString().replace("-", "");
                     String suffix = str.substring(str.lastIndexOf("."), str.length());
-                    String fileName = prefix + suffix;
+                    String fileName = uid + suffix;
                     icon = headShow + fileName;
                     File localFile = new File(savePath + fileName);
                     try {
                         file.transferTo(localFile);
-                        headService.updateHead(uid, icon);
+                        List<Object> list = new ArrayList<>();
+                        list.add(icon);
+                        list.add(uid);
+                        db.getConnection();
+                        db.executeUpdate(" update uic.f_app_user set icon=? where id=?", list);
+//                        headService.updateHead(uid, icon);
                         map.put("result", ResultDict.SUCCESS.getCode());
                         map.put("headUrl", icon);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
                         map.put("result", ResultDict.SYSTEM_ERROR.getCode());
+                    } finally {
+                        db.closeDB();
                     }
                 }
             }
@@ -93,13 +95,18 @@ public class UploadFileController extends BaseDecodedController {
         if (params != null) {
             uid = params.getString("uid");
         }
-        if (StringUtils.isEmpty(uid)) {
-            map.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
-        } else {
-            String icon = headService.getUrl(uid);
+        db.getConnection();
+        String icon = null;// headService.getUrl(uid);
+        try {
+            icon = db.getIcon("SELECT icon FROM uic.f_app_user where id=?", uid);
             map.put("headUrl", icon);
             map.put("result", ResultDict.SUCCESS.getCode());
+        } catch (SQLException e) {
+            map.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        } finally {
+            db.closeDB();
         }
+
         return JSON.toJSONString(map);
     }
 }

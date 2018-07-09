@@ -17,11 +17,6 @@
 
 
 	<dubbo:application name="ums3-client2" />
-	<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />
-
-	<context:property-placeholder
-			ignore-resource-not-found="true"
-			location="classpath*:/setup.properties, classpath*:/setup.production.properties" />
 
 	<!-- 业务使用 -->
 	<dubbo:reference id="accountManager" version="0.3.0"
@@ -54,63 +49,39 @@
 		interface="com.tpadsz.ctc.api.SettingManager" validation="true" />
 
 
-	<bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource"
-		  init-method="init" destroy-method="close">
-		<property name="url" value="${jdbc.url2}" />
-		<property name="username" value="${jdbc.username2}" />
-		<property name="password" value="${jdbc.password2}" />
-		<property name="initialSize" value="${jdbc.minsize}" />
-		<property name="minIdle" value="${jdbc.minIdle}" />
-		<property name="maxActive" value="${jdbc.maxsize}" />
-		<property name="maxWait" value="60000" />
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
-		<property name="minEvictableIdleTimeMillis" value="300000" />
-		<property name="validationQuery" value="SELECT 'x'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
-		<property name="poolPreparedStatements" value="false" />
-		<property name="filters" value="stat" />
-	</bean>
+	<!--<bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource"-->
+		  <!--init-method="init" destroy-method="close">-->
+		<!--<property name="url" value="${jdbc.url2}" />-->
+		<!--<property name="username" value="${jdbc.username2}" />-->
+		<!--<property name="password" value="${jdbc.password2}" />-->
+		<!--<property name="initialSize" value="${jdbc.minsize}" />-->
+		<!--<property name="minIdle" value="${jdbc.minIdle}" />-->
+		<!--<property name="maxActive" value="${jdbc.maxsize}" />-->
+		<!--<property name="maxWait" value="60000" />-->
+		<!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
+		<!--<property name="minEvictableIdleTimeMillis" value="300000" />-->
+		<!--<property name="validationQuery" value="SELECT 'x'" />-->
+		<!--<property name="testWhileIdle" value="true" />-->
+		<!--<property name="testOnBorrow" value="false" />-->
+		<!--<property name="testOnReturn" value="false" />-->
+		<!--<property name="poolPreparedStatements" value="false" />-->
+		<!--<property name="filters" value="stat" />-->
+	<!--</bean>-->
 
-	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource2" />
-		<property name="mapperLocations" value="classpath:mapper/*Mapper.xml" />
-		<property name="typeAliasesPackage" value="com.model" />
-		<property name="configLocation" value="classpath:/conf/mybatisConfig.xml" />
-	</bean>
+	<!--<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+		<!--<property name="dataSource" ref="dataSource2" />-->
+		<!--<property name="mapperLocations" value="classpath:mapper/*Mapper.xml" />-->
+		<!--<property name="typeAliasesPackage" value="com.model" />-->
+		<!--<property name="configLocation" value="classpath:/conf/mybatisConfig.xml" />-->
+	<!--</bean>-->
 
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		  p:sqlSessionFactoryBeanName="sqlSessionFactory2" p:basePackage="com.uicdao" />
+	<!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"-->
+		  <!--p:sqlSessionFactoryBeanName="sqlSessionFactory2" p:basePackage="com.uicdao" />-->
 
-	<bean class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="sqlSessionFactory2"></constructor-arg>
-	</bean>
+	<!--<bean class="org.mybatis.spring.SqlSessionTemplate">-->
+		<!--<constructor-arg ref="sqlSessionFactory2"></constructor-arg>-->
+	<!--</bean>-->
 
-	<bean id="jedisConnFactory"
-		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		  p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
-		  p:usePool="true">
-	</bean>
-
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-		  init-method="init" destroy-method="close">
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-		<property name="initialSize" value="${jdbc.minsize}" />
-		<property name="minIdle" value="${jdbc.minIdle}" />
-		<property name="maxActive" value="${jdbc.maxsize}" />
-		<property name="maxWait" value="60000" />
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
-		<property name="minEvictableIdleTimeMillis" value="300000" />
-		<property name="validationQuery" value="SELECT 'x'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
-		<property name="poolPreparedStatements" value="false" />
-		<property name="filters" value="stat" />
-	</bean>
 		
 	<!-- QuartZ 配置 -->
 	<!-- 线程执行器配置，用于任务注册 -->
@@ -172,31 +143,6 @@
 		<property name="jobDetail" ref="generateTasksJob" />
 		<property name="cronExpression" value="0 30 3 * * ?" />
 	</bean>
-
-	<!--配置自动刷新数据-->
-	<!--<bean id="refreshIntoLogCountStoreJob"-->
-		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
-		<!--<property name="targetObject" ref="logCountStoreService" />-->
-		<!--<property name="targetMethod" value="refreshIntoLogCountStore" />-->
-		<!--<property name="concurrent" value="false" />-->
-	<!--</bean>-->
-	<!--<bean id="refreshIntoLogCountStoreTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
-		<!--<property name="jobDetail" ref="refreshIntoLogCountStoreJob" />-->
-		<!--<property name="cronExpression" value="0 0 22 * * ?" />-->
-	<!--</bean>-->
-
-
-	<!--配置视频文件日志自动刷新-->
-	<!--<bean id="refreshIntoSPFileDownloadJob"-->
-		  <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
-		<!--<property name="targetObject" ref="spFileDownloadService" />-->
-		<!--<property name="targetMethod" value="refreshIntoSpFileDownload" />-->
-		<!--<property name="concurrent" value="false" />-->
-	<!--</bean>-->
-	<!--<bean id="refreshIntoSPFileDownloadTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
-		<!--<property name="jobDetail" ref="refreshIntoSPFileDownloadJob" />-->
-		<!--<property name="cronExpression" value="0 0 23 * * ?" />-->
-	<!--</bean>-->
 
 	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
 	<cache:annotation-driven cache-manager="cacheManager" />
@@ -374,35 +320,35 @@
 		</bean>
 	</beans>-->
 
-	<!--<beans profile="production">-->
-	<!--<bean id="jedisConnFactory"-->
-          <!--class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"-->
-          <!--p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"-->
-          <!--p:usePool="true">-->
-    <!--</bean>-->
-		<!--<context:property-placeholder-->
-			<!--ignore-resource-not-found="true"-->
-			<!--location="classpath*:/setup.properties, classpath*:/setup.production.properties" />-->
-		<!--<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />-->
-		<!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
-			<!--init-method="init" destroy-method="close">-->
-			<!--<property name="url" value="${jdbc.url}" />-->
-			<!--<property name="username" value="${jdbc.username}" />-->
-			<!--<property name="password" value="${jdbc.password}" />-->
-			<!--<property name="initialSize" value="${jdbc.minsize}" />-->
-			<!--<property name="minIdle" value="${jdbc.minIdle}" />-->
-			<!--<property name="maxActive" value="${jdbc.maxsize}" />-->
-			<!--<property name="maxWait" value="60000" />-->
-			<!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
-			<!--<property name="minEvictableIdleTimeMillis" value="300000" />-->
-			<!--<property name="validationQuery" value="SELECT 'x'" />-->
-			<!--<property name="testWhileIdle" value="true" />-->
-			<!--<property name="testOnBorrow" value="false" />-->
-			<!--<property name="testOnReturn" value="false" />-->
-			<!--<property name="poolPreparedStatements" value="false" />-->
-			<!--<property name="filters" value="stat" />-->
-		<!--</bean>-->
-	<!--</beans>-->
+	<beans profile="production">
+	<bean id="jedisConnFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
+          p:usePool="true">
+    </bean>
+		<context:property-placeholder
+			ignore-resource-not-found="true"
+			location="classpath*:/setup.properties, classpath*:/setup.production.properties" />
+		<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />
+		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+			init-method="init" destroy-method="close">
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="initialSize" value="${jdbc.minsize}" />
+			<property name="minIdle" value="${jdbc.minIdle}" />
+			<property name="maxActive" value="${jdbc.maxsize}" />
+			<property name="maxWait" value="60000" />
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			<property name="minEvictableIdleTimeMillis" value="300000" />
+			<property name="validationQuery" value="SELECT 'x'" />
+			<property name="testWhileIdle" value="true" />
+			<property name="testOnBorrow" value="false" />
+			<property name="testOnReturn" value="false" />
+			<property name="poolPreparedStatements" value="false" />
+			<property name="filters" value="stat" />
+		</bean>
+	</beans>
 
 	<!--<beans profile="demo">
 	<bean id="jedisConnFactory"
