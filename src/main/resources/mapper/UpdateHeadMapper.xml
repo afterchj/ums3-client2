@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dao.UpdateHeadDao">
+<mapper namespace="com.uicdao.UpdateHeadDao">
     <update id="updateHead" parameterType="string">
-        update uic.f_app_user set icon=#{icon} where id= #{id};
+        update uic.f_app_user set icon=#{icon} where id= #{id}
     </update>
 
+    <select id="getUrl" parameterType="string" resultType="string">
+        SELECT icon FROM uic.f_app_user where id= #{id}
+    </select>
 </mapper>

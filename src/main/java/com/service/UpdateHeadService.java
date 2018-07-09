@@ -6,4 +6,6 @@ package com.service;
  */
 public interface UpdateHeadService {
     void updateHead(String uid, String path);
+
+    String getUrl(String uid);
 }
