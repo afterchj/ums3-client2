@@ -174,5 +174,5 @@ public class Constants {
 			return displayName;
 		}
 	}
-	
+
 }

@@ -23,7 +23,7 @@ public class CoinController extends BaseDecodedController{
 
 	private CoinService coinService;
 	private CoinsAccountManager coinsAccountManager;
-	
+
 	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public String searchAll(@ModelAttribute("decodedParams")JSONObject params, ModelMap model){
 		try {
@@ -39,7 +39,7 @@ public class CoinController extends BaseDecodedController{
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(value="/search/avail", method=RequestMethod.POST)
 	public String searchAvail(@ModelAttribute("decodedParams")JSONObject params, ModelMap model){
 		try {
@@ -54,7 +54,7 @@ public class CoinController extends BaseDecodedController{
 		}
 		return null;
 	}
-	
+
 
 	@Autowired
 	public void setCoinService(CoinService coinService) {
@@ -65,7 +65,7 @@ public class CoinController extends BaseDecodedController{
 	public void setCoinsAccountManager(CoinsAccountManager coinsAccountManager) {
 		this.coinsAccountManager = coinsAccountManager;
 	}
-	
-	
+
+
 
 }

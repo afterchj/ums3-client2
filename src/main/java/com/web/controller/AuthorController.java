@@ -33,7 +33,6 @@ public class AuthorController {
 	@ExceptionHandler(RuntimeException.class)
 	public String handleException(RuntimeException re,
 			HttpServletRequest request) {
-		logger.error("author." + re.getMessage());
 		if (request.getContextPath().indexOf("\\/m\\/") > 0) {
 			return "forword:/app/m/home";
 		} else {

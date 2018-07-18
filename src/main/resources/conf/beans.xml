@@ -31,14 +31,14 @@
 		interface="com.tpadsz.uic.user.api.TokenManager" validation="true" />
 
 	<dubbo:reference id="imageManager" version="0.1.1" interface="com.tpadsz.img.api.ImageManager" validation="true" />
-	
+
 	<dubbo:reference id="coinsAccountManager" version="0.2.0"
 		interface="com.tpadsz.cic.coin.api.CoinsAccountManager" validation="true" />
 	<dubbo:reference id="coinsConsumerManager" version="0.2.0"
 		interface="com.tpadsz.cic.coin.api.CoinsConsumerManager" validation="true" />
 	<dubbo:reference id="coinsEarnerManager" version="0.2.0"
 		interface="com.tpadsz.cic.coin.api.CoinsEarnerManager" validation="true" />
-	
+
 	<dubbo:reference id="userManager" version="0.3.0"
 		interface="com.tpadsz.ctc.api.UserManager" validation="true" />
 	<dubbo:reference id="shelfManager" version="0.3.0"
@@ -85,64 +85,62 @@
 		
 	<!-- QuartZ 配置 -->
 	<!-- 线程执行器配置，用于任务注册 -->
-	<bean id="executor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="1" />
-		<property name="maxPoolSize" value="3" />
-		<property name="queueCapacity" value="5" />
-	</bean>
+	<!--<bean id="executor"-->
+		<!--class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+		<!--<property name="corePoolSize" value="1" />-->
+		<!--<property name="maxPoolSize" value="3" />-->
+		<!--<property name="queueCapacity" value="5" />-->
+	<!--</bean>-->
 	<!-- 设置调度 -->
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="updateGoodsStockAndSalesTrigger"/>
-				<ref bean="updateMemberByFillingUidTrigger"/>
-				<ref bean="generateTasksTrigger"/>
-				<!--<ref bean="refreshIntoLogCountStoreTrigger"/>-->
-				<!--<ref bean="refreshIntoSPFileDownloadTrigger"/>-->
-			</list>
-		</property>
-		<property name="taskExecutor" ref="executor" />
-	</bean>
+	<!--<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+		<!--<property name="triggers">-->
+			<!--<list>-->
+				<!--<ref bean="updateGoodsStockAndSalesTrigger"/>-->
+				<!--<ref bean="updateMemberByFillingUidTrigger"/>-->
+				<!--<ref bean="generateTasksTrigger"/>-->
+			<!--</list>-->
+		<!--</property>-->
+		<!--<property name="taskExecutor" ref="executor" />-->
+	<!--</bean>-->
 	
-	<bean id="updateMemberByFillingUidJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="memberService" />
-		<property name="targetMethod" value="updateMemberByFillingUid" />
-		<property name="concurrent" value="false" /><!--配置为false不允许任务并发执行 -->
-	</bean>
+	<!--<bean id="updateMemberByFillingUidJob"-->
+		<!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject" ref="memberService" />-->
+		<!--<property name="targetMethod" value="updateMemberByFillingUid" />-->
+		<!--<property name="concurrent" value="false" />&lt;!&ndash;配置为false不允许任务并发执行 &ndash;&gt;-->
+	<!--</bean>-->
 
 	<!-- 调度触发器 -->
-	<bean id="updateMemberByFillingUidTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="updateMemberByFillingUidJob" />
-		<property name="cronExpression" value="10 0 0/3 * * ?" />
-	</bean>
-	
-	<bean id="updateGoodsStockAndSalesJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="goodsService" />
-		<property name="targetMethod" value="updateStockAndSales" />
-		<property name="concurrent" value="false" /><!--配置为false不允许任务并发执行 -->
-	</bean>
+	<!--<bean id="updateMemberByFillingUidTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+		<!--<property name="jobDetail" ref="updateMemberByFillingUidJob" />-->
+		<!--<property name="cronExpression" value="10 0 0/3 * * ?" />-->
+	<!--</bean>-->
+	<!---->
+	<!--<bean id="updateGoodsStockAndSalesJob"-->
+		<!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject" ref="goodsService" />-->
+		<!--<property name="targetMethod" value="updateStockAndSales" />-->
+		<!--<property name="concurrent" value="false" />&lt;!&ndash;配置为false不允许任务并发执行 &ndash;&gt;-->
+	<!--</bean>-->
 
-	<!-- 调度触发器 -->
-	<bean id="updateGoodsStockAndSalesTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="updateGoodsStockAndSalesJob" />
-		<property name="cronExpression" value="0 0/10 * * * ?" />
-	</bean>
-	
-	<bean id="generateTasksJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="taskService" />
-		<property name="targetMethod" value="generateTasks" />
-		<property name="concurrent" value="false" />
-	</bean>
+	<!--&lt;!&ndash; 调度触发器 &ndash;&gt;-->
+	<!--<bean id="updateGoodsStockAndSalesTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+		<!--<property name="jobDetail" ref="updateGoodsStockAndSalesJob" />-->
+		<!--<property name="cronExpression" value="0 0/10 * * * ?" />-->
+	<!--</bean>-->
+	<!---->
+	<!--<bean id="generateTasksJob"-->
+		<!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+		<!--<property name="targetObject" ref="taskService" />-->
+		<!--<property name="targetMethod" value="generateTasks" />-->
+		<!--<property name="concurrent" value="false" />-->
+	<!--</bean>-->
 
-	<!-- 调度触发器 -->
-	<bean id="generateTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="generateTasksJob" />
-		<property name="cronExpression" value="0 30 3 * * ?" />
-	</bean>
+	<!--&lt;!&ndash; 调度触发器 &ndash;&gt;-->
+	<!--<bean id="generateTasksTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+		<!--<property name="jobDetail" ref="generateTasksJob" />-->
+		<!--<property name="cronExpression" value="0 30 3 * * ?" />-->
+	<!--</bean>-->
 
 	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
 	<cache:annotation-driven cache-manager="cacheManager" />

@@ -31,12 +31,12 @@ public class HomeController {
 	private Logger logger = Logger.getLogger(HomeController.class);
 	
 	
-	@ExceptionHandler(RuntimeException.class)
-	public String handleException(RuntimeException re,
-			HttpServletRequest request) {
+//	@ExceptionHandler(RuntimeException.class)
+//	public String handleException(RuntimeException re,
+//			HttpServletRequest request) {
 //		logger.error("home.", re);
-		return null;
-	}
+//		return null;
+//	}
 	
 	@RequestMapping("/home")
 	public String oldHome(String g, ModelMap model){

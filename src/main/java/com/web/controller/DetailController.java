@@ -32,13 +32,12 @@ public class DetailController {
 	@ExceptionHandler(RuntimeException.class)
 	public String handleException(RuntimeException re,
 			HttpServletRequest request) {
-		logger.error("detail. Message: " + re.getMessage() + " URI:" + request.getRequestURI());
-//		if (request.getContextPath().indexOf("\\/m\\/") > 0) {
-//			return "forword:/app/m/home";
-//		} else {
-//			return "forward:/app/f/home";
-//		}
-		return null;
+//		logger.error("detail. Message: " + re.getMessage() + " URI:" + request.getRequestURI());
+		if (request.getContextPath().indexOf("\\/m\\/") > 0) {
+			return "forword:/app/m/home";
+		} else {
+			return "forward:/app/f/home";
+		}
 	}
 
 	@RequestMapping("/{gender}/details/id{id}")
