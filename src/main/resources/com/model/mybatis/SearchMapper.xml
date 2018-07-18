@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SearchDao">
+
+    <insert id="save" parameterType="String">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            SELECT count(*) FROM mopita.f_user_search s WHERE s.name=#{searchName}
+        </selectKey>
+        <if test="count > 0">
+            UPDATE mopita.f_user_search s
+            SET s.times = times + 1
+            WHERE
+            s.name = #{searchName}
+        </if>
+        <if test="count==0">
+            INSERT INTO mopita.f_user_search (
+            name,
+            times,
+            update_time
+            )
+            VALUES
+            (#{searchName},1,NOW());
+        </if>
+    </insert>
+
+    <select id="findByUser" resultType="String">
+        SELECT name FROM mopita.f_hottest_search WHERE times IS NOT NULL ORDER BY rand() LIMIT 8
+    </select>
+
+    <select id="findByOfficial" resultType="String">
+        SELECT name FROM mopita.f_hottest_search WHERE times IS NULL ORDER BY rand() LIMIT 2
+    </select>
+
+    <delete id="delete">
+        truncate table mopita.f_hottest_search
+    </delete>
+
+    <insert id="refreshHottestSearchNamesByUser">
+        INSERT INTO mopita.f_hottest_search (
+        name,
+        times,
+        update_time
+        ) SELECT
+        s.name AS name,
+        s.times AS times,
+        NOW() AS update_time
+        FROM
+        mopita.f_user_search s
+        ORDER BY s.times DESC LIMIT 30;
+    </insert>
+
+    <insert id="refreshHottestSearchNamesByOfficial">
+        INSERT INTO mopita.f_hottest_search (
+        name,
+        update_time
+        ) SELECT
+        o.name AS name,
+        NOW() AS update_time
+        FROM
+        mopita.f_official_search o
+        WHERE o.status='1' AND o.is_delete='0';
+    </insert>
+
+    <delete id="deleteExpiresLog" parameterType="Date">
+        delete from mopita.f_user_search where DateDiff(update_time,CURDATE())=-7
+    </delete>
+</mapper>
