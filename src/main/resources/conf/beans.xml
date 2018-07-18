@@ -47,6 +47,7 @@
 		interface="com.tpadsz.ctc.api.TaskManager" validation="true" />
 	<dubbo:reference id="settingManager" version="0.3.0"
 		interface="com.tpadsz.ctc.api.SettingManager" validation="true" />
+
 	<bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource"
 		  init-method="init" destroy-method="close">
 		<property name="url" value="${jdbc.url2}" />
@@ -328,25 +329,43 @@
 			ignore-resource-not-found="true"
 			location="classpath*:/setup.properties, classpath*:/setup.production.properties" />
 		<dubbo:registry protocol="zookeeper" address="${zookeeper.url}" />
-		<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-			init-method="init" destroy-method="close">
+		<!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
+			<!--init-method="init" destroy-method="close">-->
+			<!--<property name="url" value="${jdbc.url}" />-->
+			<!--<property name="username" value="${jdbc.username}" />-->
+			<!--<property name="password" value="${jdbc.password}" />-->
+			<!--<property name="initialSize" value="${jdbc.minsize}" />-->
+			<!--<property name="minIdle" value="${jdbc.minIdle}" />-->
+			<!--<property name="maxActive" value="${jdbc.maxsize}" />-->
+			<!--&lt;!&ndash;<property name="maxWait" value="200000" />&ndash;&gt;-->
+			<!--&lt;!&ndash;<property name="timeBetweenEvictionRunsMillis" value="200000" />&ndash;&gt;-->
+			<!--<property name="maxWait" value="60000" />-->
+			<!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
+			<!--<property name="minEvictableIdleTimeMillis" value="300000" />-->
+			<!--<property name="validationQuery" value="SELECT 'x'" />-->
+			<!--<property name="testWhileIdle" value="true" />-->
+			<!--<property name="testOnBorrow" value="false" />-->
+			<!--<property name="testOnReturn" value="false" />-->
+			<!--<property name="poolPreparedStatements" value="false" />-->
+			<!--<property name="filters" value="stat" />-->
+		<!--</bean>-->
+
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+			  destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driverclass}" />
 			<property name="url" value="${jdbc.url}" />
-			<property name="username" value="${jdbc.username}" />
-			<property name="password" value="${jdbc.password}" />
-			<property name="initialSize" value="${jdbc.minsize}" />
-			<property name="minIdle" value="${jdbc.minIdle}" />
-			<property name="maxActive" value="${jdbc.maxsize}" />
-			<!--<property name="maxWait" value="200000" />-->
-			<!--<property name="timeBetweenEvictionRunsMillis" value="200000" />-->
-			<property name="maxWait" value="60000" />
-			<property name="timeBetweenEvictionRunsMillis" value="60000" />
-			<property name="minEvictableIdleTimeMillis" value="300000" />
-			<property name="validationQuery" value="SELECT 'x'" />
-			<property name="testWhileIdle" value="true" />
-			<property name="testOnBorrow" value="false" />
-			<property name="testOnReturn" value="false" />
-			<property name="poolPreparedStatements" value="false" />
-			<property name="filters" value="stat" />
+			<property name="username" value="${jdbc.username}"/>
+			<property name="password" value="${jdbc.password}"/>
+			<!-- 最大连接数据库连接数 -->
+			<property name="maxActive" value="50" />
+			<!-- 最大等待连接中的数量 0标识没有限制 -->
+			<property name="maxIdle" value="10" />
+			<!-- 最大等待毫秒数 超时报错 -->
+			<property name="maxWait" value="500" />
+			<property name="defaultAutoCommit" value="true" />
+			<!-- 是否自我中断 -->
+			<property name="removeAbandoned" value="true" />
+			<property name="removeAbandonedTimeout" value="60" />
 		</bean>
 	</beans>
 
