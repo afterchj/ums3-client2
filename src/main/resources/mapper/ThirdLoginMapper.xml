@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uicdao.ThirdLoginDao">
+    <resultMap id="getThirdUserInf" type="ThirdLogin">
+        <id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qq_nickname" column="qq_nickname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qq_image_url" column="qq_image_url" javaType="String" jdbcType="VARCHAR"/>
+        <result property="wx" column="wx" javaType="String" jdbcType="VARCHAR"/>
+        <result property="wx_nickname" column="wx_nickname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="wx_image_url" column="wx_image_url" javaType="String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserThidInfoById" parameterType="string" resultMap="getThirdUserInf">
+        SELECT
+    	    *
+        FROM
+        	f_app_user_third
+        WHERE
+        	id = #{uid};
+    </select>
+
+    <select id="getUserInfoById" parameterType="string" resultType="map">
+        SELECT
+    	  a.id,a.login_name,a.nickname,t.mobile,a.icon,t.birthyear,t.birthmonth,t.birthday,t.prov,t.gender,a.serialno
+        FROM
+        	f_app_user a,
+        	f_tpad_user t
+        WHERE
+        	a.tpad_id = t.id
+        	AND a.id = #{uid} and app_id=1;
+    </select>
+
+    <insert id="saveUserThirdInfo" parameterType="com.model.ThirdLogin" >
+        INSERT INTO f_app_user_third (id, qq, qq_nickname, qq_image_url, wx, wx_nickname, wx_image_url)
+        VALUES(#{id},#{qq},#{qq_nickname},#{qq_image_url},#{wx},#{wx_nickname},#{wx_image_url})
+    </insert>
+
+    <update id="updateUserQQ" parameterType="com.model.ThirdLogin">
+        UPDATE f_app_user_third 
+        <set>
+            <if test="qq!=null">qq = #{qq},</if>
+            <if test="qq_nickname!=null">qq_nickname = #{qq_nickname},</if>
+            <if test="qq_image_url!=null">qq_image_url = #{qq_image_url},</if>
+        </set>
+        WHERE
+        	id = #{id}; 
+    </update>
+
+    <update id="updateUserWx" parameterType="com.model.ThirdLogin">
+        UPDATE f_app_user_third
+        <set>
+            <if test="wx!=null">wx = #{wx},</if>
+            <if test="wx_nickname!=null">wx_nickname = #{wx_nickname},</if>
+            <if test="wx_image_url!=null">wx_image_url = #{wx_image_url},</if>
+        </set>
+        WHERE
+        id = #{id};
+    </update>
+
+</mapper>
