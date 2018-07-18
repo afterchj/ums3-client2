@@ -46,11 +46,11 @@ public class UpdateController extends BaseDecodedController{
 					try {
 						AppUser submittedAppUser = infoManager.remoteSubmit(OfferFactory.generateLoginedOffer(appUser.getId(), appUser.getToken()), generateAppUser(member));
 						submittedAppUser.setToken(appUser.getToken());
-						try {
-							noticeService.pushMessage(Constants.NOTICE_WELCOME_NAME, String.format(Constants.NOTICE_WELCOME_CONTENT, appUser.getSerialno()), Constants.NOTICE_TYPE_SYSTEM, appUser.getId(), Constants.NOTICE_DTYPE_NATIVE);
-						} catch (Exception e) {
-							logger.error("", e);
-						}
+//						try {
+//							noticeService.pushMessage(Constants.NOTICE_WELCOME_NAME, String.format(Constants.NOTICE_WELCOME_CONTENT, appUser.getSerialno()), Constants.NOTICE_TYPE_SYSTEM, appUser.getId(), Constants.NOTICE_DTYPE_NATIVE);
+//						} catch (Exception e) {
+//							logger.error("", e);
+//						}
 						model.put("user", UserVo.convert(submittedAppUser));
 						model.put("result", ResultDict.SUCCESS.getCode());
 					} catch (Exception e) {

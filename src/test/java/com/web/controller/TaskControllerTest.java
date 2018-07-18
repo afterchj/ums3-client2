@@ -1,31 +1,27 @@
+/*
 package com.web.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import com.dao.SPItemDao;
-import com.model.SPItem;
-import com.model.dd.ResultDict;
-import com.service.SPItemService;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.model.ThirdLogin;
+import com.tpadsz.uic.user.api.vo.TpadUser;
+import com.uicdao.ThirdLoginDao;
 import com.utils.Constants;
-import org.springframework.context.ApplicationContext;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.List;
+import java.util.Map;
 
 public class TaskControllerTest {
 	static  ClassPathXmlApplicationContext ctx;
-	 static  {
-		 ctx = new ClassPathXmlApplicationContext("conf/beans.xml", "conf/spring-servlet.xml");
+	static{
+		ctx = new ClassPathXmlApplicationContext("classpath:conf/beans.xml");
 	}
-
 
 	@Test
 	public void test() {
@@ -70,5 +66,54 @@ public class TaskControllerTest {
 	}
 
 
+	ThirdLoginDao thirdLoginDao = ctx.getBean("thirdLoginDao", ThirdLoginDao.class);
+	@Test
+	public void test2(){
+		ThirdLogin third = new ThirdLogin();
+		third.setId("ba1d14a0fe0040808d7ee6612c25385e");
+		third.setQq("1234");
+		third.setQq_nickname("kaikai");
+		third.setQq_image_url("http:123.jpg");
+//		third.setWx("234");
+//		third.setWx_image_url("http:www.2345.jpg");
+		Map<String, Object> map = thirdLoginDao.getUserInfoById(third.getId());
+
+		com.tpadsz.uic.user.api.vo.AppUser appUser = new com.tpadsz.uic.user
+				.api.vo.AppUser();
+		TpadUser tpadUser = new TpadUser();
+		appUser.setTpadUser(tpadUser);
+		appUser.setId((String) map.get("id"));
+		if (map.get("icon")!=null){
+			appUser.setIcon((String) map.get("icon"));
+		}
+		if (map.get("nickname")!=null){
+			appUser.setNickname((String) map.get("nickname"));
+		}
+		if (map.get("birthday")!=null){
+			appUser.getTpadUser().setBirthday((Integer) map.get("birthday"));
+		}
+		if (map.get("birthmonth")!=null){
+			appUser.getTpadUser().setBirthmonth((Integer) map.get("birthmonth"));
+		}
+		if (map.get("birthyear")!=null){
+			appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
+		}
+		if (map.get("login_name")!=null){
+			appUser.setLoginName((String) map.get("login_name"));
+		}
+		if (map.get("mobile")!=null){
+			appUser.getTpadUser().setMobile((String) map.get("mobile"));
+		}
+
+		if (map.get("prov")!=null){
+			appUser.getTpadUser().setProv((Integer) map.get("prov"));
+		}
+		if (map.get("gender")!=null){
+			appUser.getTpadUser().setGender((Integer) map.get("gender"));
+		}
+		System.out.println(JSONObject.toJSON(appUser));
+	}
+
 
 }
+*/

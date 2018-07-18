@@ -1,3 +1,4 @@
+/*
 package com.service.impl;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -59,3 +60,4 @@ public class UserServiceImplTest {
 	}
 
 }
+*/

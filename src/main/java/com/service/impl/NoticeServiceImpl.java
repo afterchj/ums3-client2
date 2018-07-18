@@ -68,17 +68,17 @@ public class NoticeServiceImpl implements NoticeService{
 
 	@Override
 	public void pushMessage(String name, String content, int type, String uid, int dtype) throws SystemAlgorithmException {
-//		try {
-//			DNotice notice = new DNotice();
-//			notice.setName(name);
-//			notice.setDetail(content);
-//			notice.setDtype(dtype);
-//			notice.setType(type);
-//			notice.setUid(uid);
+		try {
+			DNotice notice = new DNotice();
+			notice.setName(name);
+			notice.setDetail(content);
+			notice.setDtype(dtype);
+			notice.setType(type);
+			notice.setUid(uid);
 //			save(notice);
-//		} catch (NotExecutedDbException e) {
-//			throw new SystemAlgorithmException("bean:noticeService, method:pushMessage", e);
-//		}
+		} catch (Exception e) {
+			throw new SystemAlgorithmException("bean:noticeService, method:pushMessage", e);
+		}
 	}
 
 	private void save(DNotice notice) throws NotExecutedDbException {

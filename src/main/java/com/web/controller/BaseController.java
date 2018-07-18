@@ -1,16 +1,15 @@
 package com.web.controller;
 
-import javax.validation.ValidationException;
-
+import com.alibaba.dubbo.rpc.RpcException;
+import com.model.dd.ResultDict;
+import com.utils.Constants;
+import com.utils.LoggerUtils;
 import org.apache.log4j.Logger;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.dubbo.rpc.RpcException;
-import com.model.dd.ResultDict;
-import com.utils.Constants;
-import com.utils.LoggerUtils;
+import javax.validation.ValidationException;
 
 public class BaseController {
 	

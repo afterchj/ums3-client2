@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.model.dd.ResultDict;
 import com.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,7 @@ public class ParamsEncryptInterceptor implements HandlerInterceptor{
 				request.setAttribute("decodedParams", paramMap);
 				return true;
 			} catch (Exception e) {
-//				system.error("ParamsDecoderFilter decode Params error! Handler:" + ToStringBuilder.reflectionToString(handler));
+				system.error("ParamsDecoderFilter decode Params error! Handler:" + ToStringBuilder.reflectionToString(handler));
 				Map<String, String> data = new HashMap<>();
 				data.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
 				HttpServletUtil.renderText(response, Encryption.encode(JSONObject.toJSONString(data)));

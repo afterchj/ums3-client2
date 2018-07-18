@@ -1,3 +1,4 @@
+/*
 package com.service.impl;
 
 import static org.mockito.Mockito.*;
@@ -41,3 +42,4 @@ public class ScheduledMonitorServiceTest extends ScheduledMonitorService {
 	
 
 }
+*/
