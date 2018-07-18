@@ -1,5 +1,6 @@
 package com.web.controller;
 
+import com.alibaba.dubbo.rpc.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ import com.tpadsz.vo.Offer;
 import com.utils.Constants;
 import com.web.vo.UserVo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Controller("accountTpadController")
 @RequestMapping("/account/tpad")
 public class AccountTpadController extends BaseDecodedController{
@@ -37,9 +41,16 @@ public class AccountTpadController extends BaseDecodedController{
 	@RequestMapping(value="/handy-register", method=RequestMethod.POST)
 	public String handyRegister(@ModelAttribute("decodedParams")JSONObject params, ModelMap model)  {
 		try {
+			Firmware firmware =  JSONObject.parseObject(params.getString("firmware"), Firmware.class);
+			String imei = firmware.getImei();
+			String imsi = firmware.getImsi();
+			if (StringUtils.isBlank(imei) || StringUtils.isBlank(imsi)){
+				model.put("result", ResultDict.PARAMS_NOT_PARSED.getCode());
+				return null;
+			}
 			Offer offer = OfferFactory.generateOffer();
 			try {
-				Firmware firmware =  JSONObject.parseObject(params.getString("firmware"), Firmware.class);
+
 				if(firmware != null){
 					offer.putValue("firmware", firmware);
 				}
@@ -47,11 +58,11 @@ public class AccountTpadController extends BaseDecodedController{
 				logger.error("JSONObject.parseObject", e1);
 			}
 			AppUser user = accountManager.registerHandily(offer);
-			try {
-				noticeService.pushMessage(Constants.NOTICE_WELCOME_NAME, String.format(Constants.NOTICE_WELCOME_CONTENT, user.getSerialno()), Constants.NOTICE_TYPE_SYSTEM, user.getId(), Constants.NOTICE_DTYPE_NATIVE);
-			} catch (Exception e) {
-				logger.error("noticeService pushMessage", e);
-			}
+//			try {
+//				noticeService.pushMessage(Constants.NOTICE_WELCOME_NAME, String.format(Constants.NOTICE_WELCOME_CONTENT, user.getSerialno()), Constants.NOTICE_TYPE_SYSTEM, user.getId(), Constants.NOTICE_DTYPE_NATIVE);
+//			} catch (Exception e) {
+//				logger.error("noticeService pushMessage", e);
+//			}
 //测试代码, 注册默认送100元
 //try {
 //	coinAddManager.addCoins(user.getId(), Constants.APP_ID, "170", "123", UUID.randomUUID().toString(), 100000);

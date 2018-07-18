@@ -75,8 +75,8 @@ public class NoticeServiceImpl implements NoticeService{
 			notice.setDtype(dtype);
 			notice.setType(type);
 			notice.setUid(uid);
-			save(notice);
-		} catch (NotExecutedDbException e) {
+//			save(notice);
+		} catch (Exception e) {
 			throw new SystemAlgorithmException("bean:noticeService, method:pushMessage", e);
 		}
 	}

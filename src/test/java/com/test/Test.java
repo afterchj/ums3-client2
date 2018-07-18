@@ -1,3 +1,4 @@
+/*
 package com.test;
 
 import com.utils.convert.DBUtils;
@@ -7,9 +8,11 @@ import java.util.*;
 
 public class Test {
 
-    /**
+    */
+/**
      * @param args
-     */
+     *//*
+
     public static void main(String[] args) {
         // TODO Auto-generated method stub
 
@@ -40,4 +43,4 @@ public class Test {
         }
     }
 
-}
+}*/

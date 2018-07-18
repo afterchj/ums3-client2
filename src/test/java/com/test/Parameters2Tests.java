@@ -1,3 +1,4 @@
+/*
 package com.test;
 
 import static org.hamcrest.Matchers.is;
@@ -47,3 +48,4 @@ public class Parameters2Tests {
 		assertThat(actual, is(this.expectedDate));
 	}
 }
+*/
