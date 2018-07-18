@@ -24,7 +24,7 @@ public class FileDownloadController {
 	@ExceptionHandler(RuntimeException.class)
 	public String handleException(RuntimeException re,
 			HttpServletRequest request, ModelMap model) {
-		logger.error("FileDownloadController .", re);
+//		logger.error("FileDownloadController .", re);
 		model.put("status", "500");
 		return null;
 	}

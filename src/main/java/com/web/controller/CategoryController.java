@@ -40,14 +40,14 @@ public class CategoryController {
 	@Autowired
 	private CountService countService;
 	
-	@ExceptionHandler(Exception.class)
-	public String handleException(RuntimeException re,
-			HttpServletRequest request) {
-		if(!(re instanceof TypeMismatchException)){
-			logger.error("category.",re);
-		}
-		return null;
-	}
+//	@ExceptionHandler(Exception.class)
+//	public String handleException(RuntimeException re,
+//			HttpServletRequest request) {
+//		if(!(re instanceof TypeMismatchException)){
+//			logger.error("category.",re);
+//		}
+//		return null;
+//	}
 
 	@RequestMapping("/{gender}/category")
 	public String home(@PathVariable("gender") String gender, ModelMap model) {

@@ -34,9 +34,9 @@ public class HottestController {
 	@ExceptionHandler(RuntimeException.class)
 	public String handleException(RuntimeException re,
 			HttpServletRequest request) {
-		if(!(re instanceof TypeMismatchException)){
-			logger.error("hottest.", re);
-		}
+//		if(!(re instanceof TypeMismatchException)){
+//			logger.error("hottest.", re);
+//		}
 		if (request.getContextPath().indexOf("\\/m\\/") > 0) {
 			return "forword:/app/m/home";
 		} else {
