@@ -20,4 +20,12 @@ public interface ThirdLoginDao {
 
     void saveUserThirdInfo(ThirdLogin third);
 
+    void updateTpadUser(Map<String, Object> map);
+
+    void updateAppUser(Map<String, Object> map);
+
+
+    String getTpadIdByUid(String map) throws Exception;
+
+    Map<String,Object> getAppUserByUid(String uid);
 }

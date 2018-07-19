@@ -219,7 +219,6 @@
             <mvc:exclude-mapping path="/logCountStore/**"/>
             <mvc:exclude-mapping path="/spfile/**"/>
             <mvc:exclude-mapping path="/sptopic/**"/>
-            <mvc:exclude-mapping path="/search/**"/>
             <mvc:exclude-mapping path="/home/**"/>
             <mvc:exclude-mapping path="/heads/**"/>
             <bean class="com.web.interceptor.UserTokenValidationInterceptor"/>

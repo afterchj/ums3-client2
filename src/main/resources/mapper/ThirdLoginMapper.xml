@@ -59,4 +59,27 @@
         id = #{id};
     </update>
 
+    <update id="updateTpadUser" parameterType="map">
+        update f_tpad_user set gender=#{gender}, birthday=#{birthday}, birthyear=#{birthyear}, birthmonth=#{birthmonth} where id=#{tpad_id}
+    </update>
+
+    <update id="updateAppUser" parameterType="map">
+        UPDATE f_app_user set nickname=#{nickname} WHERE id=#{uid}
+    </update>
+
+    <select id="getTpadIdByUid" parameterType="string" resultType="string">
+        select f.tpad_id from f_app_user f where id=#{uid}
+    </select>
+
+
+    <select id="getAppUserByUid" parameterType="string" resultType="map">
+        SELECT
+        a.id,a.login_name,a.nickname,t.mobile,a.icon,t.birthyear,t.birthmonth,t.birthday,t.prov,t.gender,a.serialno
+        FROM
+        f_app_user a,
+        f_tpad_user t
+        WHERE
+        a.tpad_id = t.id
+        AND a.id = #{uid} and app_id=1;
+    </select>
 </mapper>

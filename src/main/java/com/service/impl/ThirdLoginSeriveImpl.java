@@ -21,51 +21,47 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
 
     @Override
     public com.tpadsz.uic.user.api.vo.AppUser getUserInfoById(ThirdLogin third) {
-        System.out.println("start getUserInfoById");
         Map<String, Object> map = thirdLoginDao.getUserInfoById(third.getId());
-        System.out.println("end getUserInfoById");
         com.tpadsz.uic.user.api.vo.AppUser appUser = new com.tpadsz.uic.user
                 .api.vo.AppUser();
         TpadUser tpadUser = new TpadUser();
         appUser.setTpadUser(tpadUser);
         appUser.setId((String) map.get("id"));
-        if (map.get("icon") != null) {
+        if (StringUtils.isNotBlank(map.get("icon").toString())) {
             appUser.setIcon((String) map.get("icon"));
         }
-        if (map.get("nickname") != null) {
+        if (StringUtils.isNotBlank(map.get("nickname").toString())) {
             appUser.setNickname((String) map.get("nickname"));
         }
-        if (map.get("birthday") != null) {
-            appUser.getTpadUser().setBirthday((Integer) map.get("birthday"));
+        if (StringUtils.isNotBlank(map.get("birthday").toString())) {
+            appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
+                    ("birthday").toString()));
         }
-        if (map.get("birthmonth") != null) {
+        if (StringUtils.isNotBlank(map.get("birthmonth").toString())) {
             appUser.getTpadUser().setBirthmonth((Integer) map.get
                     ("birthmonth"));
         }
-        if (map.get("birthyear") != null) {
+        if (StringUtils.isNotBlank(map.get("birthyear").toString())) {
             appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
         }
-        if (map.get("login_name") != null) {
+        if (StringUtils.isNotBlank(map.get("login_name").toString())) {
             appUser.setLoginName(map.get("login_name").toString());
         }
-        if (map.get("mobile") != null) {
+        if (StringUtils.isNotBlank(map.get("mobile").toString())) {
             appUser.getTpadUser().setMobile((String) map.get("mobile"));
         }
 
-        if (map.get("prov") != null) {
+        if (StringUtils.isNotBlank(map.get("prov").toString())) {
             appUser.getTpadUser().setProv((Integer) map.get("prov"));
         }
-        if (map.get("gender") != null) {
+        if (StringUtils.isNotBlank(map.get("gender").toString())) {
             appUser.getTpadUser().setGender((Integer) map.get("gender"));
         }
-        if (map.get("serialno") != null) {
+        if (StringUtils.isNotBlank(map.get("serialno").toString())) {
             appUser.setSerialno((String) map.get("serialno"));
         }
-
         //查询f_app_user_third记录
-        System.out.println("start getUserThidInfoById");
         ThirdLogin thirdLogin = thirdLoginDao.getUserThidInfoById(third.getId());
-        System.out.println("end getUserThidInfoById");
         //保存或修改f_app_user_third的qq或微信信息
         SaveOrUpdateThirdInfo(thirdLogin, third);
         //修改f_app_user字段nickname，icon的值
@@ -90,24 +86,44 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
         return appUser;
     }
 
+    @Override
+    public void updateTpadUser(Map<String, Object> map) {
+        thirdLoginDao.updateTpadUser(map);
+    }
+
+    @Override
+    public void updateAppUser(Map<String, Object> map) {
+         thirdLoginDao.updateAppUser(map);
+    }
+
+    @Override
+    public String getTpadIdByUid(String map) {
+
+        try {
+            return thirdLoginDao.getTpadIdByUid(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getAppUserByUid(String uid) {
+        return thirdLoginDao.getAppUserByUid(uid);
+    }
+
     public void SaveOrUpdateThirdInfo(ThirdLogin thirdLogin, ThirdLogin third) {
 
         if (thirdLogin == null) {
-            System.out.println("start saveUserThirdInfo");
             thirdLoginDao.saveUserThirdInfo(third);
-            System.out.println("end saveUserThirdInfo");
         } else {
             //有记录
             if (StringUtils.isNotBlank(third.getQq())) {
                 //补全qq信息
-                System.out.println("start updateUserQQ");
                 thirdLoginDao.updateUserQQ(third);
-                System.out.println("end updateUserQQ");
             } else if (StringUtils.isNotBlank(third.getWx())) {
                 //补全微信信息
-                System.out.println("start updateUserWx");
                 thirdLoginDao.updateUserWx(third);
-                System.out.println("end updateUserWx");
             }
         }
     }
