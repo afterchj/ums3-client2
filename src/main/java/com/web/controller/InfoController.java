@@ -283,6 +283,7 @@ public class InfoController extends BaseDecodedController {
         AppUser appUser = new AppUser();
         TpadUser tpadUser = new TpadUser();
         appUser.setTpadUser(tpadUser);
+        appUser.setId((String) map.get("id"));
         if (StringUtils.isNotBlank(map.get("icon").toString())) {
             appUser.setIcon((String) map.get("icon"));
         }

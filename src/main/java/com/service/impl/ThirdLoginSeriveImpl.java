@@ -112,6 +112,20 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
         return thirdLoginDao.getAppUserByUid(uid);
     }
 
+    @Override
+    public Map<String, Object> findByMobile(String mobile) {
+        return thirdLoginDao.findByMobile(mobile);
+    }
+
+    @Override
+    public Map<String, Object> findByTpad(String tpadId) {
+        if (StringUtils.isBlank(tpadId)){
+            return null;
+        }
+        Map<String,Object> map = thirdLoginDao.findByTpad(tpadId);
+        return map;
+    }
+
     public void SaveOrUpdateThirdInfo(ThirdLogin thirdLogin, ThirdLogin third) {
 
         if (thirdLogin == null) {

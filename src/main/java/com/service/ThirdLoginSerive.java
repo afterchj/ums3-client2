@@ -18,4 +18,8 @@ public interface ThirdLoginSerive {
     String getTpadIdByUid(String map);
 
     Map<String,Object> getAppUserByUid(String uid);
+
+    Map<String,Object> findByMobile(String mobile);
+
+    Map<String,Object> findByTpad(String id);
 }

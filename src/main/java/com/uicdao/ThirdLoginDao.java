@@ -28,4 +28,8 @@ public interface ThirdLoginDao {
     String getTpadIdByUid(String map) throws Exception;
 
     Map<String,Object> getAppUserByUid(String uid);
+
+    Map<String,Object> findByMobile(String mobile);
+
+    Map<String,Object> findByTpad(String tpadId);
 }

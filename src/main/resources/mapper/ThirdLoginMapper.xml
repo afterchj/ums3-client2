@@ -80,6 +80,14 @@
         f_tpad_user t
         WHERE
         a.tpad_id = t.id
-        AND a.id = #{uid} and app_id=1;
+        AND a.id = #{uid} and app_id=1
+    </select>
+
+    <select id="findByMobile" parameterType="string" resultType="map">
+        select * from f_tpad_user WHERE mobile=#{mobile}
+    </select>
+
+    <select id="findByTpad" parameterType="string" resultType="map">
+        SELECT * FROM f_app_user WHERE tpad_id=#{tpadId} AND app_id=1
     </select>
 </mapper>

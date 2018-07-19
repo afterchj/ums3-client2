@@ -17,14 +17,11 @@ import com.tpadsz.uic.user.api.exception.TokenNotEffectiveException;
 import com.tpadsz.uic.user.api.exception.UserNotFoundException;
 import com.tpadsz.uic.user.api.vo.AppUser;
 import com.tpadsz.uic.user.api.vo.TpadUser;
-import com.utils.Constants;
-import com.utils.MapUtil;
+import com.utils.*;
 import com.utils.convert.DBUtils;
 import com.web.vo.UserVo;
-import javassist.bytecode.stackmap.BasicBlock;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,11 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static sun.java2d.cmm.ColorTransform.In;
 
 @Controller("mobileController")
 @RequestMapping("/account/mobile")
@@ -77,6 +75,7 @@ public class MobileContoller extends BaseDecodedController {
         }
         return null;
     }
+
 
     @RequestMapping(value = "/setup", method = RequestMethod.POST)
     public String setup(@ModelAttribute("decodedParams") JSONObject params,
@@ -120,6 +119,90 @@ public class MobileContoller extends BaseDecodedController {
         } catch (Exception e) {
             system.error("method:submitRegisterTask,uid:" + uid, e);
         }
+    }
+
+    @RequestMapping(value = "/login2", method = RequestMethod.POST)
+    public String change2(@ModelAttribute("decodedParams") JSONObject params,
+                          ModelMap model) {
+        ResultDict result = ResultDict.SUCCESS;
+        String mobile = params.getString("mobile");
+        String pwd = params.getString("pwd");
+        if (StringUtils.isBlank(mobile) || StringUtils.isBlank(pwd)) {
+            model.put("result", result.PARAMS_BLANK.getCode());
+            return null;
+        } else {
+
+            //验证账号
+            Map<String, Object> map = thirdLoginSerive.findByMobile(mobile);
+            if (MapUtil.isBlank(map)) {
+                model.put("result", result.ACCOUNT_NOT_CORRECT.getCode());
+                return null;
+            }
+            //验证密码 空
+            boolean isCorrect = checkPassword(pwd, map.get("password").toString(), map.get("salt").toString());
+            if (!isCorrect) {
+                model.put("result", result.ACCOUNT_NOT_CORRECT.getCode());
+                return null;
+            }
+            Map<String,Object> map1 = thirdLoginSerive.findByTpad(map.get("id").toString());
+            if (StringUtils.isNotBlank(map1.get("status").toString()) &&
+                    StringUtils.isNotBlank(map.get("status").toString())) {
+                if (map1.get("status") == 0 || map.get("status") == 0) {
+                    model.put("result", result.AUTHORITY_NOT_ALLOWED.getCode());
+                    return null;
+                }
+            }
+            AppUser appUser = mapToAppUser(map,map1);
+            model.put("result", result.SUCCESS.getCode());
+            model.put("user", UserVo.convert(appUser));
+        }
+        return null;
+    }
+
+    private AppUser mapToAppUser(Map<String, Object> map, Map<String, Object> map1) {
+        AppUser appUser = new AppUser();
+        TpadUser tpadUser = new TpadUser();
+        appUser.setTpadUser(tpadUser);
+        appUser.setId((String) map.get("id"));
+        if (StringUtils.isNotBlank(map.get("gender").toString())) {
+            appUser.getTpadUser().setGender(Integer.valueOf(map.get("gender").toString()));
+        }
+        if (StringUtils.isNotBlank(map.get("prov").toString())){
+            appUser.getTpadUser().setProv(Integer.valueOf(map.get("prov").toString()));
+        }
+        if (StringUtils.isNotBlank(map.get("birthday").toString())) {
+            appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
+                    ("birthday").toString()));
+        }
+        if (StringUtils.isNotBlank(map.get("birthmonth").toString())) {
+            appUser.getTpadUser().setBirthmonth((Integer) map.get
+                    ("birthmonth"));
+        }
+        if (StringUtils.isNotBlank(map.get("birthyear").toString())) {
+            appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
+        }
+        if (StringUtils.isNotBlank(map.get("mobile").toString())) {
+            appUser.getTpadUser().setMobile((String) map.get("mobile"));
+        }
+        if (StringUtils.isNotBlank(map.get("legal_name").toString())){
+            appUser.getTpadUser().setLegalName(map.get("legal_name").toString());
+        }
+        if (StringUtils.isNotBlank(map1.get("icon").toString())) {
+            appUser.setIcon((String) map1.get("icon"));
+        }
+        if (StringUtils.isNotBlank(map1.get("nickname").toString())) {
+            appUser.setNickname((String) map1.get("nickname"));
+        }
+        if (StringUtils.isNotBlank(map1.get("login_name").toString())) {
+            appUser.setLoginName(map1.get("login_name").toString());
+        }
+        if (StringUtils.isNotBlank(map1.get("serialno").toString())) {
+            appUser.setSerialno((String) map1.get("serialno"));
+        }
+        if (StringUtils.isNotBlank(map1.get("communityUid").toString())){
+            appUser.setCommunityUid(map1.get("communityUid").toString());
+        }
+        return appUser;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -347,7 +430,7 @@ public class MobileContoller extends BaseDecodedController {
                 .isNotBlank(wx)) {
             if (StringUtils.isBlank(appUser.getIcon()) &&
                     StringUtils.isNotBlank(mapThirdInfo2.get("wx_image_url")
-                    .toString())) {
+                            .toString())) {
                 appUser.setIcon(mapThirdInfo2.get("wx_image_url").toString());
             }
             if (StringUtils.isBlank(appUser.getNickname()) &&
@@ -363,6 +446,28 @@ public class MobileContoller extends BaseDecodedController {
 
         db.closeDB();
         return null;
+    }
+
+    public boolean checkPassword(String actual, String expected, String salt) {
+        if (StringUtils.isBlank(actual) || StringUtils.isBlank(expected) ||
+                StringUtils.isBlank(salt)) {
+            return false;
+        }
+        String actualEncodingPassword = encrypt(actual, Encodes.decodeHex
+                (salt));
+        if (StringUtils.equals(actualEncodingPassword, expected)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static final int INTERATIONS = 1024;
+
+    private String encrypt(String actual, byte[] salt) {
+        byte[] hashPassword = Digests.sha1(actual.getBytes(), salt,
+                INTERATIONS);
+        return Encodes.encodeHex(hashPassword);
     }
 
 }
