@@ -1,8 +1,6 @@
 package com.web.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.model.ThirdLogin;
 import com.model.dd.OfferFactory;
 import com.model.dd.ResultDict;
 import com.service.NoticeService;
@@ -11,16 +9,15 @@ import com.tpadsz.ctc.api.UserManager;
 import com.tpadsz.ctc.exception.TaskRepeatException;
 import com.tpadsz.ctc.vo.Present;
 import com.tpadsz.ctc.vo.UserCommitOffer;
-import com.tpadsz.exception.ApplicationNotCorrectException;
-import com.tpadsz.exception.CheckNotAllowedException;
-import com.tpadsz.exception.ParamBlankException;
-import com.tpadsz.exception.SystemAlgorithmException;
+import com.tpadsz.exception.*;
 import com.tpadsz.uic.user.api.InfoManager;
 import com.tpadsz.uic.user.api.QueryManager;
+import com.tpadsz.uic.user.api.exception.MobileAlreadyExistedException;
 import com.tpadsz.uic.user.api.exception.TokenNotEffectiveException;
 import com.tpadsz.uic.user.api.exception.UserNotFoundException;
 import com.tpadsz.uic.user.api.vo.AppUser;
 import com.tpadsz.uic.user.api.vo.TpadUser;
+import com.uicdao.ThirdLoginDao;
 import com.utils.Constants;
 import com.utils.LoggerUtils;
 import com.web.vo.UserVo;
@@ -35,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import java.util.Map;
+
+import static com.model.dd.OfferFactory.generateLoginedOffer;
 
 @RequestMapping("/account/info")
 @Controller("infoController")
@@ -55,7 +54,7 @@ public class InfoController extends BaseDecodedController {
             String token = params.getString("token");
             String invitation = params.getString("invition");
             TpadUser tpadUser = generateSimplifyTpadUser(params);
-            infoManager.patch(OfferFactory.generateLoginedOffer(uid, token),
+            infoManager.patch(generateLoginedOffer(uid, token),
                     tpadUser);
             if (StringUtils.isNotBlank(invitation) && !StringUtils.equals
                     (invitation, uid)) {
@@ -149,38 +148,39 @@ public class InfoController extends BaseDecodedController {
 
     @Resource
     private ThirdLoginSerive thirdLoginSerive;
+
     //修改个人资料
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String modify(@ModelAttribute("decodedParams") JSONObject params,
                          ModelMap model) {
-//        try {
-        Map<String, Object> map = JSON.parseObject(params.toJSONString());
-        String uid = params.getString("uid");
-        String tpad_id = thirdLoginSerive.getTpadIdByUid(uid);
-        map.put("tpad_id", tpad_id);
-        thirdLoginSerive.updateTpadUser(map);
-        thirdLoginSerive.updateAppUser(map);
-//			String token = params.getString("token");
-//			TpadUser tpadUser = generateFullTpadUser(params);
-//			infoManager.patch(OfferFactory.generateLoginedOffer(uid, token),
-// tpadUser);
-
-//			AppUser appUser = generateAppUser(params);
-//			infoManager.patch(OfferFactory.generateLoginedOffer(uid, token),
-// appUser);
-        model.put("result", ResultDict.SUCCESS.getCode());
-//		} catch (SystemAlgorithmException | ApplicationNotCorrectException e) {
-//			system.error(e);
-//			model.put("result", ResultDict.SYSTEM_ERROR.getCode());
-//		} catch (UserNotFoundException e) {
-//			model.put("result", ResultDict.ACCOUNT_NOT_EXISTED.getCode());
-//		} catch (TokenNotEffectiveException e) {
-//			model.put("result", ResultDict.TOKEN_NOT_CORRECT.getCode());
-//		} catch (NotExecutedDbException e) {
-//			system.error(e);
-//		} catch (MobileAlreadyExistedException e) {
-//			system.error(e);
-//		}
+        try {
+//        Map<String, Object> map = JSON.parseObject(params.toJSONString());
+            String uid = params.getString("uid");
+//        String tpad_id = thirdLoginSerive.getTpadIdByUid(uid);
+//        map.put("tpad_id", tpad_id);
+//        thirdLoginSerive.updateTpadUser(map);
+//        thirdLoginSerive.updateAppUser(map);
+            String token = params.getString("token");
+            TpadUser tpadUser = generateFullTpadUser(params);
+            infoManager.patch(generateLoginedOffer(uid, token),
+                    tpadUser);
+//
+            AppUser appUser = generateAppUser(params);
+            infoManager.patch(generateLoginedOffer(uid, token),
+                    appUser);
+            model.put("result", ResultDict.SUCCESS.getCode());
+        } catch (SystemAlgorithmException | ApplicationNotCorrectException e) {
+            system.error(e);
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        } catch (UserNotFoundException e) {
+            model.put("result", ResultDict.ACCOUNT_NOT_EXISTED.getCode());
+        } catch (TokenNotEffectiveException e) {
+            model.put("result", ResultDict.TOKEN_NOT_CORRECT.getCode());
+        } catch (NotExecutedDbException e) {
+            system.error(e);
+        } catch (MobileAlreadyExistedException e) {
+            system.error(e);
+        }
         return null;
     }
 
@@ -203,8 +203,8 @@ public class InfoController extends BaseDecodedController {
             String uid = params.getString("uid");
             String token = params.getString("token");
             AppUser appUser = generateAppUser(params);
-            AppUser submittedAppUser = infoManager.remoteSubmit(OfferFactory
-                    .generateLoginedOffer(uid, token), appUser);
+            AppUser submittedAppUser = infoManager.remoteSubmit(
+                    generateLoginedOffer(uid, token), appUser);
             model.put("result", ResultDict.SUCCESS.getCode());
             model.put("user", UserVo.convert(submittedAppUser));
         } catch (SystemAlgorithmException | ApplicationNotCorrectException e) {
@@ -234,11 +234,11 @@ public class InfoController extends BaseDecodedController {
                 throw new ParamBlankException();
             }
             if (mode != null) {
-                infoManager.changeMode(OfferFactory.generateLoginedOffer(uid,
+                infoManager.changeMode(generateLoginedOffer(uid,
                         token), mode);
             }
             if (mode2 != null) {
-                infoManager.changeMode2(OfferFactory.generateLoginedOffer
+                infoManager.changeMode2(generateLoginedOffer
                         (uid, token), mode2);
             }
             model.put("result", ResultDict.SUCCESS.getCode());
@@ -259,28 +259,29 @@ public class InfoController extends BaseDecodedController {
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public String getInfo(@ModelAttribute("decodedParams") JSONObject params,
                           ModelMap model) {
-//        try {
-            String uid = params.getString("uid");
-            Map<String,Object> map = thirdLoginSerive.getAppUserByUid(uid);
-            AppUser appUser = mapToAppUser(map);
+        try {
+        String uid = params.getString("uid");
+//        Map<String, Object> map = thirdLoginSerive.getAppUserByUid(uid);
+//        AppUser appUser = mapToAppUser(map);
 
-           /* String token = params.getString("token");
+            String token = params.getString("token");
             AppUser appUser = infoManager.getBaseUserInfo(OfferFactory
-                    .generateLoginedOffer(uid, token));*/
-            model.put("result", ResultDict.SUCCESS.getCode());
-            model.put("user", UserVo.convert(appUser));
-       /* } catch (SystemAlgorithmException | ApplicationNotCorrectException e) {
+                    .generateLoginedOffer(uid, token));
+        model.put("result", ResultDict.SUCCESS.getCode());
+        model.put("user", UserVo.convert(appUser));
+        } catch (SystemAlgorithmException | ApplicationNotCorrectException
+       e) {
             system.error(e);
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         } catch (UserNotFoundException e) {
             model.put("result", ResultDict.ACCOUNT_NOT_EXISTED.getCode());
         } catch (TokenNotEffectiveException e) {
             model.put("result", ResultDict.TOKEN_NOT_CORRECT.getCode());
-        }*/
+        }
         return null;
     }
 
-    private AppUser mapToAppUser(Map<String,Object> map){
+    private AppUser mapToAppUser(Map<String, Object> map) {
         AppUser appUser = new AppUser();
         TpadUser tpadUser = new TpadUser();
         appUser.setTpadUser(tpadUser);
