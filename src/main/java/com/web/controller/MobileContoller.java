@@ -2,6 +2,7 @@ package com.web.controller;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
+import com.model.DTpadUser;
 import com.model.ThirdLogin;
 import com.model.dd.OfferFactory;
 import com.model.dd.ResultDict;
@@ -17,8 +18,12 @@ import com.tpadsz.uic.user.api.exception.TokenNotEffectiveException;
 import com.tpadsz.uic.user.api.exception.UserNotFoundException;
 import com.tpadsz.uic.user.api.vo.AppUser;
 import com.tpadsz.uic.user.api.vo.TpadUser;
-import com.utils.*;
+import com.utils.Constants;
+import com.utils.Digests;
+import com.utils.Encodes;
+import com.utils.MapUtil;
 import com.utils.convert.DBUtils;
+import com.web.vo.MobileVerifyType;
 import com.web.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +38,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static sun.java2d.cmm.ColorTransform.In;
 
 @Controller("mobileController")
 @RequestMapping("/account/mobile")
@@ -104,6 +107,35 @@ public class MobileContoller extends BaseDecodedController {
         }
         return null;
     }
+    //第三方登录绑定手机号
+    @RequestMapping(value = "/setupThird", method = RequestMethod.POST)
+    public String setup2(@ModelAttribute("decodedParams") JSONObject params,
+                        ModelMap model) throws MemcachedNotResponsedException {
+        try {
+            String mobile = params.getString("mobile");
+            String code = params.getString("code");
+            String uid = params.getString("uid");
+            DTpadUser tpadUser = thirdLoginSerive.getTpadUser(uid);
+            if (StringUtils.isNotBlank(tpadUser.getMobile()) &&
+                    StringUtils.equalsIgnoreCase(tpadUser.getMobile(), mobile)) {
+                return null;
+            }
+            thirdLoginSerive.checkValidation(code, mobile, MobileVerifyType.REGISTER);
+            thirdLoginSerive.setupMobile(tpadUser, mobile);
+            thirdLoginSerive.deleteValidation(code, mobile, MobileVerifyType.REGISTER);
+//            submitRegisterTask(uid, token);
+            model.put("result", ResultDict.SUCCESS.getCode());
+        } catch (InvalidValidationCodeException e) {
+            model.put("result", ResultDict.VALIDATION_CODE_NOT_CORRECT
+                    .getCode());
+        } catch (UserNotFoundException e) {
+            model.put("result", ResultDict.ACCOUNT_NOT_CORRECT.getCode());
+        } catch (SystemAlgorithmException | ApplicationNotCorrectException e) {
+            system.error(e);
+            model.put("result", ResultDict.SYSTEM_ERROR.getCode());
+        }
+        return null;
+    }
 
     private void submitRegisterTask(String uid, String token) {
         try {
@@ -121,6 +153,7 @@ public class MobileContoller extends BaseDecodedController {
         }
     }
 
+    //手机登录
     @RequestMapping(value = "/login2", method = RequestMethod.POST)
     public String change2(@ModelAttribute("decodedParams") JSONObject params,
                           ModelMap model) {
@@ -147,7 +180,7 @@ public class MobileContoller extends BaseDecodedController {
             Map<String,Object> map1 = thirdLoginSerive.findByTpad(map.get("id").toString());
             if (StringUtils.isNotBlank(map1.get("status").toString()) &&
                     StringUtils.isNotBlank(map.get("status").toString())) {
-                if (map1.get("status") == 0 || map.get("status") == 0) {
+                if (Integer.valueOf(map1.get("status").toString()) == 0 || Integer.valueOf(map.get("status").toString()) == 0) {
                     model.put("result", result.AUTHORITY_NOT_ALLOWED.getCode());
                     return null;
                 }
@@ -246,7 +279,6 @@ public class MobileContoller extends BaseDecodedController {
         third.setWx(wx);
         third.setWx_nickname(params.getString("wx_nickname"));
         third.setWx_image_url(params.getString("wx_image_url"));
-
         AppUser appUsers = thirdLoginSerive.getUserInfoById(third);
         model.put("user", UserVo.convert(appUsers));
         model.put("result", result.getCode());

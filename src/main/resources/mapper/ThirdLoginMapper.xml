@@ -12,6 +12,71 @@
         <result property="wx_image_url" column="wx_image_url" javaType="String" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap type="DAppUser" id="standardAppUserMap">
+        <id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="loginName" column="login_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="serialno" column="serialno" javaType="String" jdbcType="VARCHAR"/>
+        <result property="descr" column="descr" javaType="String" jdbcType="VARCHAR"/>
+        <result property="password" column="password" javaType="String" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isSubmit" column="is_submit" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isActivated" column="is_activated" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="mode" column="mode" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="mode2" column="mode2" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="clientVersion" column="cv" javaType="String" jdbcType="VARCHAR"/>
+        <result property="imei" column="imei" javaType="String" jdbcType="VARCHAR"/>
+        <result property="imsi" column="imsi" javaType="String" jdbcType="VARCHAR"/>
+        <result property="fm" column="fm" javaType="String" jdbcType="VARCHAR"/>
+        <result property="os" column="os" javaType="String" jdbcType="VARCHAR"/>
+        <result property="model" column="model" javaType="String" jdbcType="VARCHAR"/>
+        <result property="operators" column="operators" javaType="String" jdbcType="VARCHAR"/>
+        <result property="resolution" column="resolution" javaType="String" jdbcType="VARCHAR"/>
+        <result property="netEnv" column="net_env" javaType="String" jdbcType="VARCHAR"/>
+        <result property="pkg" column="pkg" javaType="String" jdbcType="VARCHAR"/>
+        <result property="master" column="master" javaType="String" jdbcType="VARCHAR"/>
+        <result property="grandMaster" column="grand_master" javaType="String" jdbcType="VARCHAR"/>
+        <result property="type" column="type" javaType="String" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="qqNickname" column="qq_nickname" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qqProv" column="prov" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qqCity" column="city" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" javaType="String" jdbcType="VARCHAR"/>
+        <result property="rank" column="rank" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="communityUid" column="txid" javaType="String" jdbcType="VARCHAR"/>
+        <result property="communityFlg" column="mode3" javaType="Integer" jdbcType="INTEGER"/>
+        <association property="tpadUser" column="tpad_id" select="com.dao.DTpadUserDao.getById"></association>
+        <association property="app" column="app_id" select="com.dao.DApplicationDao.getById"></association>
+    </resultMap>
+
+    <resultMap type="DTpadUser" id="standardTpadUserMap">
+        <id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+        <result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+        <result property="serialno" column="serialno" javaType="String" jdbcType="VARCHAR"/>
+        <result property="legalName" column="legal_name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="String" jdbcType="VARCHAR"/>
+        <result property="password" column="password" javaType="String" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
+        <result property="info1" column="info1" javaType="String" jdbcType="VARCHAR"/>
+        <result property="info2" column="info2" javaType="String" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="prov" column="prov" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="city" column="city" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="birthyear" column="birthyear" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="birthmonth" column="birthmonth" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="birthday" column="birthday" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="isActivated" column="is_activated" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="app_columns">
+        id, master, grand_master, type, rank, login_name, nickname, serialno, descr, password, salt, status, is_activated, create_date, tpad_id, app_id, is_submit, mode, mode2,cv, imei, imsi, fm, os, model, operators, resolution, net_env, pkg,gender,qq_nickname,prov,city,icon,qq,txid,mode3
+    </sql>
     <select id="getUserThidInfoById" parameterType="string" resultMap="getThirdUserInf">
         SELECT
     	    *
@@ -90,4 +155,12 @@
     <select id="findByTpad" parameterType="string" resultType="map">
         SELECT * FROM f_app_user WHERE tpad_id=#{tpadId} AND app_id=1
     </select>
+
+    <select id="getById" resultMap="standardAppUserMap" parameterType="string" >
+        SELECT <include refid="app_columns"/> from f_app_user u where u.id=#{id}
+    </select>
+
+    <update id="update" parameterType="DTpadUser">
+        update f_tpad_user set mobile=#{mobile},status=#{status},is_activated=#{isActivated} where id=#{id}
+    </update>
 </mapper>

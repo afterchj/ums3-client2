@@ -2,6 +2,7 @@ package com.test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.model.ThirdLogin;
 import com.model.dd.ResultDict;
 import com.service.ThirdLoginSerive;
 import com.tpadsz.uic.user.api.vo.AppUser;
@@ -9,6 +10,7 @@ import com.tpadsz.uic.user.api.vo.TpadUser;
 import com.utils.Digests;
 import com.utils.Encodes;
 import com.utils.MapUtil;
+import com.web.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -94,7 +96,7 @@ public class JsonMapTest {
                     ("id").toString());
             if (StringUtils.isNotBlank(map1.get("status").toString()) &&
                     StringUtils.isNotBlank(map.get("status").toString())) {
-                if (map1.get("status") == 0 || map.get("status") == 0) {
+                if (Integer.valueOf(map1.get("status").toString()) == 0 || Integer.valueOf(map.get("status").toString()) == 0) {
                     System.out.println(ResultDict.AUTHORITY_NOT_ALLOWED.getCode());
                 }
             }
@@ -170,5 +172,29 @@ public class JsonMapTest {
         byte[] hashPassword = Digests.sha1(actual.getBytes(), salt,
                 INTERATIONS);
         return Encodes.encodeHex(hashPassword);
+    }
+
+    @Test
+    public void test4(){
+        String qq = "E92A8DF534D9DB20A994A7C3B2213097";
+        String wx = "";
+        String uid = "9f0045b0aaa343e49fa7d26c0d23d435";
+//        String qq_nickname = "qq_nick1234";
+        String qq_nickname = "凯凯王";
+        String qq_image_url = "http://thirdqq.qlogo.cn/qqapp/100735153/E92A8DF534D9DB20A994A7C3B2213097/100";
+        String wx_nickname = "";
+        String wx_image_url = "";
+        ThirdLogin third = new ThirdLogin();
+        third.setId(uid);
+        third.setQq(qq);
+        third.setQq_nickname(qq_nickname);
+        third.setQq_image_url(qq_image_url);
+        third.setWx(wx);
+        third.setWx_nickname(wx_nickname);
+        third.setWx_image_url(wx_image_url);
+        AppUser appUsers = thirdLoginSerive.getUserInfoById(third);
+        System.out.println( UserVo.convert(appUsers));
+
+        System.out.println(appUsers.getIcon());
     }
 }

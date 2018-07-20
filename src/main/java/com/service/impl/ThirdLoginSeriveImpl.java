@@ -1,10 +1,24 @@
 package com.service.impl;
 
+import com.cache.XMemcachedClient;
+import com.model.DAppUser;
+import com.model.DTpadUser;
+import com.model.MNumValidation;
 import com.model.ThirdLogin;
 import com.service.ThirdLoginSerive;
+import com.tpadsz.exception.ApplicationNotCorrectException;
+import com.tpadsz.exception.MemcachedNotResponsedException;
+import com.tpadsz.exception.NotExecutedDbException;
+import com.tpadsz.exception.SystemAlgorithmException;
+import com.tpadsz.uic.user.api.exception.InvalidValidationCodeException;
+import com.tpadsz.uic.user.api.exception.UserNotFoundException;
+import com.tpadsz.uic.user.api.vo.MemcachedObjectType;
 import com.tpadsz.uic.user.api.vo.TpadUser;
 import com.uicdao.ThirdLoginDao;
+import com.web.vo.MobileVerifyType;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,6 +33,10 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
     @Resource
     private ThirdLoginDao thirdLoginDao;
 
+    private XMemcachedClient client;
+
+    private Logger logger = Logger.getLogger(ThirdLoginSeriveImpl.class);
+
     @Override
     public com.tpadsz.uic.user.api.vo.AppUser getUserInfoById(ThirdLogin third) {
         Map<String, Object> map = thirdLoginDao.getUserInfoById(third.getId());
@@ -27,37 +45,71 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
         TpadUser tpadUser = new TpadUser();
         appUser.setTpadUser(tpadUser);
         appUser.setId((String) map.get("id"));
-        if (StringUtils.isNotBlank(map.get("icon").toString())) {
+        /*if (StringUtils.isNotBlank((CharSequence) map.get("icon"))) {
             appUser.setIcon((String) map.get("icon"));
         }
-        if (StringUtils.isNotBlank(map.get("nickname").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("nickname"))) {
             appUser.setNickname((String) map.get("nickname"));
         }
-        if (StringUtils.isNotBlank(map.get("birthday").toString())) {
+        if (StringUtils.isNotBlank((CharSequence)map.get("birthday"))) {
             appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
                     ("birthday").toString()));
         }
-        if (StringUtils.isNotBlank(map.get("birthmonth").toString())) {
+        if (StringUtils.isNotBlank((CharSequence)map.get("birthmonth"))) {
             appUser.getTpadUser().setBirthmonth((Integer) map.get
                     ("birthmonth"));
         }
-        if (StringUtils.isNotBlank(map.get("birthyear").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("birthyear"))) {
             appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
         }
-        if (StringUtils.isNotBlank(map.get("login_name").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("login_name"))) {
             appUser.setLoginName(map.get("login_name").toString());
         }
-        if (StringUtils.isNotBlank(map.get("mobile").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("mobile"))) {
             appUser.getTpadUser().setMobile((String) map.get("mobile"));
         }
 
-        if (StringUtils.isNotBlank(map.get("prov").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("prov"))) {
             appUser.getTpadUser().setProv((Integer) map.get("prov"));
         }
         if (StringUtils.isNotBlank(map.get("gender").toString())) {
-            appUser.getTpadUser().setGender((Integer) map.get("gender"));
+            appUser.getTpadUser().setGender(Integer.valueOf(map.get("gender").toString()));
         }
-        if (StringUtils.isNotBlank(map.get("serialno").toString())) {
+        if (StringUtils.isNotBlank((CharSequence) map.get("serialno"))) {
+            appUser.setSerialno((String) map.get("serialno"));
+        }*/
+
+        if (map.get("icon")!=null) {
+            appUser.setIcon((String) map.get("icon"));
+        }
+        if (map.get("nickname")!=null) {
+            appUser.setNickname((String) map.get("nickname"));
+        }
+        if (map.get("birthday")!=null) {
+            appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
+                    ("birthday").toString()));
+        }
+        if (map.get("birthmonth")!=null) {
+            appUser.getTpadUser().setBirthmonth((Integer) map.get
+                    ("birthmonth"));
+        }
+        if ( map.get("birthyear")!=null) {
+            appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
+        }
+        if (map.get("login_name")!=null) {
+            appUser.setLoginName(map.get("login_name").toString());
+        }
+        if (map.get("mobile")!=null) {
+            appUser.getTpadUser().setMobile((String) map.get("mobile"));
+        }
+
+        if (map.get("prov")!=null) {
+            appUser.getTpadUser().setProv((Integer) map.get("prov"));
+        }
+        if (map.get("gender")!=null) {
+            appUser.getTpadUser().setGender(Integer.valueOf(map.get("gender").toString()));
+        }
+        if ( map.get("serialno")!=null) {
             appUser.setSerialno((String) map.get("serialno"));
         }
         //查询f_app_user_third记录
@@ -124,6 +176,70 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
         }
         Map<String,Object> map = thirdLoginDao.findByTpad(tpadId);
         return map;
+    }
+
+    @Override
+    public DTpadUser getTpadUser(String uid) throws SystemAlgorithmException, UserNotFoundException,ApplicationNotCorrectException {
+        DAppUser appUser = getAppUser(uid);
+        DTpadUser tpadUser = appUser.getTpadUser();
+        return tpadUser;
+    }
+
+    @Override
+    public boolean checkValidation(String code, String mobile, MobileVerifyType type) throws InvalidValidationCodeException, MemcachedNotResponsedException {
+        Object expected = client.get(String.format(MemcachedObjectType.CACHE_MESSAGE_VERIFICATION.getPrefix(),
+                type.getValue() + "_" + mobile));
+        if(expected == null || !(expected instanceof MNumValidation)){
+            throw new InvalidValidationCodeException();
+        }
+        if(!StringUtils.equals(((MNumValidation)expected).getValue(), code)){
+            throw new InvalidValidationCodeException();
+        }
+        return true;
+    }
+
+    @Override
+    public void deleteValidation(String code, String mobile, MobileVerifyType type) throws MemcachedNotResponsedException {
+        client.delete(String.format(MemcachedObjectType.CACHE_MESSAGE_VERIFICATION.getPrefix(), type.getValue() + "_" + mobile));
+    }
+
+    @Override
+    public void setupMobile(DTpadUser tpadUser, String mobile) throws UserNotFoundException,
+            ApplicationNotCorrectException, SystemAlgorithmException {
+        tpadUser.setMobile(mobile);
+        tpadUser.setIsActivated(1);
+        try {
+            thirdLoginDao.update(tpadUser);
+        } catch (NotExecutedDbException e) {
+            logger.error("Db cannot be excuted.",e);
+            throw new SystemAlgorithmException();
+        }
+    }
+
+    private DAppUser getAppUser(String uid) throws SystemAlgorithmException, UserNotFoundException, ApplicationNotCorrectException{
+        DAppUser appUser = null;
+        try {
+            appUser = findById(uid);
+        } catch (NotExecutedDbException e1) {
+            throw new SystemAlgorithmException("", e1);
+        }
+        if (appUser == null) {
+            throw new UserNotFoundException("uid:" + uid);
+        }
+
+        return appUser;
+    }
+
+    public DAppUser findById(String uid) throws NotExecutedDbException {
+        if (StringUtils.isBlank(uid)) {
+            return null;
+        }
+        try {
+            DAppUser app = thirdLoginDao.getById(uid);
+            return app;
+        } catch (Exception e) {
+            throw new NotExecutedDbException("bean:thirdLoginDao, Method:getById", e);
+        }
     }
 
     public void SaveOrUpdateThirdInfo(ThirdLogin thirdLogin, ThirdLogin third) {

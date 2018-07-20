@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tpadsz.uic.user.dao.DTpadUserDao">
+
+    <resultMap type="DTpadUser" id="standardTpadUserMap">
+		<id property="id" column="id" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="mobile" column="mobile" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="qq" column="qq" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="serialno" column="serialno" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="legalName" column="legal_name" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="address" column="address" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="password" column="password" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="salt" column="salt" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="info1" column="info1" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="info2" column="info2" javaType="String" jdbcType="VARCHAR"/>
+       	<result property="gender" column="gender" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="prov" column="prov" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="city" column="city" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="birthyear" column="birthyear" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="birthmonth" column="birthmonth" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="birthday" column="birthday" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="status" column="status" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="isActivated" column="is_activated" javaType="Integer" jdbcType="INTEGER"/>
+       	<result property="createDate" column="create_date" javaType="Date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="getByMobile" resultMap="standardTpadUserMap" parameterType="string" >
+		SELECT t.* from f_tpad_user t where t.mobile=#{mobile}
+	</select>
+	
+	<select id="getById" resultMap="standardTpadUserMap" parameterType="string" >
+		SELECT t.* from f_tpad_user t where t.id=#{id}
+	</select>
+	
+	<sql id="tpad_columns">
+		id, mobile, qq, serialno, legal_name, address, password, salt, info1, info2, gender, prov, city, birthyear, birthmonth, birthday, status, is_activated, create_date
+	</sql>
+	
+	<insert id="save" parameterType="DTpadUser" >
+		insert into f_tpad_user(<include refid="tpad_columns"/>) values(#{id}, #{mobile}, #{qq}, #{serialno}, #{legalName}, #{address}, #{password}, #{salt}, #{info1}, #{info2}, #{gender}, #{prov}, #{city}, #{birthyear}, #{birthmonth}, #{birthday}, #{status}, #{isActivated}, #{createDate});
+	</insert>
+	
+	<update id="patch" parameterType="DTpadUser">
+	  update f_tpad_user
+	    <set>
+	      <if test="mobile != null">mobile=#{mobile},</if>
+	      <if test="qq != null">qq=#{qq},</if>
+	      <if test="legalName != null">legal_name=#{legalName},</if>
+	      <if test="address != null">address=#{address},</if>
+	      <if test="password != null">password=#{password},</if>
+	      <if test="salt != null">salt=#{salt},</if>
+	      <if test="info1 != null">info1=#{info1},</if>
+	      <if test="info2 != null">info2=#{info2},</if>
+	      <if test="gender != null">gender=#{gender},</if>
+	      <if test="prov != null">prov=#{prov},</if>
+	      <if test="city != null">city=#{city},</if>
+	      <if test="birthyear != null">birthyear=#{birthyear},</if>
+	      <if test="birthmonth != null">birthmonth=#{birthmonth},</if>
+	      <if test="birthday != null">birthday=#{birthday},</if>
+	      <if test="status != null">status=#{status},</if>
+	      <if test="isActivated != null">is_activated=#{isActivated}</if>
+	    </set>
+	  where id=#{id}
+	</update>
+	
+	<update id="update" parameterType="DTpadUser">
+		update f_tpad_user set mobile=#{mobile},qq=#{qq},legal_name=#{legalName},address=#{address},password=#{password},salt=#{salt},prov=#{prov},city=#{city},info1=#{info1},info2=#{info2},gender=#{gender},birthyear=#{birthyear},birthmonth=#{birthmonth},birthday=#{birthday},status=#{status},is_activated=#{isActivated} where id=#{id}
+	</update>
+
+</mapper>

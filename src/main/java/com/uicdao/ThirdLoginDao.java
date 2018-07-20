@@ -1,6 +1,9 @@
 package com.uicdao;
 
+import com.model.DAppUser;
+import com.model.DTpadUser;
 import com.model.ThirdLogin;
+import com.tpadsz.exception.NotExecutedDbException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
@@ -32,4 +35,8 @@ public interface ThirdLoginDao {
     Map<String,Object> findByMobile(String mobile);
 
     Map<String,Object> findByTpad(String tpadId);
+
+    DAppUser getById(String uid);
+
+    void update(DTpadUser tpadUser) throws NotExecutedDbException;
 }

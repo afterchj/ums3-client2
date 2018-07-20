@@ -149,7 +149,7 @@ public class InfoController extends BaseDecodedController {
 
     @Resource
     private ThirdLoginSerive thirdLoginSerive;
-
+    //修改个人资料
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String modify(@ModelAttribute("decodedParams") JSONObject params,
                          ModelMap model) {
@@ -255,6 +255,7 @@ public class InfoController extends BaseDecodedController {
         return null;
     }
 
+    //获取个人资料
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public String getInfo(@ModelAttribute("decodedParams") JSONObject params,
                           ModelMap model) {

@@ -1,4 +1,3 @@
-/*
 package com.test;
 
 import com.alibaba.fastjson.JSONObject;
@@ -12,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-*/
-/**
- * Created by nannan.li on 2018/7/16.
- *//*
+
+
 
 public class ThirdLoginTest {
 
@@ -167,4 +164,3 @@ public class ThirdLoginTest {
         }
     }
 }
-*/
