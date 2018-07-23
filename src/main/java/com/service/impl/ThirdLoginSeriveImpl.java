@@ -45,39 +45,6 @@ public class ThirdLoginSeriveImpl implements ThirdLoginSerive {
         TpadUser tpadUser = new TpadUser();
         appUser.setTpadUser(tpadUser);
         appUser.setId((String) map.get("id"));
-        /*if (StringUtils.isNotBlank((CharSequence) map.get("icon"))) {
-            appUser.setIcon((String) map.get("icon"));
-        }
-        if (StringUtils.isNotBlank((CharSequence) map.get("nickname"))) {
-            appUser.setNickname((String) map.get("nickname"));
-        }
-        if (StringUtils.isNotBlank((CharSequence)map.get("birthday"))) {
-            appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
-                    ("birthday").toString()));
-        }
-        if (StringUtils.isNotBlank((CharSequence)map.get("birthmonth"))) {
-            appUser.getTpadUser().setBirthmonth((Integer) map.get
-                    ("birthmonth"));
-        }
-        if (StringUtils.isNotBlank((CharSequence) map.get("birthyear"))) {
-            appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
-        }
-        if (StringUtils.isNotBlank((CharSequence) map.get("login_name"))) {
-            appUser.setLoginName(map.get("login_name").toString());
-        }
-        if (StringUtils.isNotBlank((CharSequence) map.get("mobile"))) {
-            appUser.getTpadUser().setMobile((String) map.get("mobile"));
-        }
-
-        if (StringUtils.isNotBlank((CharSequence) map.get("prov"))) {
-            appUser.getTpadUser().setProv((Integer) map.get("prov"));
-        }
-        if (StringUtils.isNotBlank(map.get("gender").toString())) {
-            appUser.getTpadUser().setGender(Integer.valueOf(map.get("gender").toString()));
-        }
-        if (StringUtils.isNotBlank((CharSequence) map.get("serialno"))) {
-            appUser.setSerialno((String) map.get("serialno"));
-        }*/
 
         if (map.get("icon")!=null) {
             appUser.setIcon((String) map.get("icon"));

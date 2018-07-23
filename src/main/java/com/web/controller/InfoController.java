@@ -166,6 +166,7 @@ public class InfoController extends BaseDecodedController {
                     tpadUser);
 //
             AppUser appUser = generateAppUser(params);
+//            appUser.setQq(null);
             infoManager.patch(generateLoginedOffer(uid, token),
                     appUser);
             model.put("result", ResultDict.SUCCESS.getCode());
