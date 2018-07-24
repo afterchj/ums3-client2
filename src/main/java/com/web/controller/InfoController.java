@@ -146,20 +146,12 @@ public class InfoController extends BaseDecodedController {
         return tpadUser;
     }
 
-    @Resource
-    private ThirdLoginSerive thirdLoginSerive;
-
     //修改个人资料
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String modify(@ModelAttribute("decodedParams") JSONObject params,
                          ModelMap model) {
         try {
-//        Map<String, Object> map = JSON.parseObject(params.toJSONString());
             String uid = params.getString("uid");
-//        String tpad_id = thirdLoginSerive.getTpadIdByUid(uid);
-//        map.put("tpad_id", tpad_id);
-//        thirdLoginSerive.updateTpadUser(map);
-//        thirdLoginSerive.updateAppUser(map);
             String token = params.getString("token");
             TpadUser tpadUser = generateFullTpadUser(params);
             infoManager.patch(generateLoginedOffer(uid, token),
@@ -261,17 +253,14 @@ public class InfoController extends BaseDecodedController {
     public String getInfo(@ModelAttribute("decodedParams") JSONObject params,
                           ModelMap model) {
         try {
-        String uid = params.getString("uid");
-//        Map<String, Object> map = thirdLoginSerive.getAppUserByUid(uid);
-//        AppUser appUser = mapToAppUser(map);
-
+            String uid = params.getString("uid");
             String token = params.getString("token");
             AppUser appUser = infoManager.getBaseUserInfo(OfferFactory
                     .generateLoginedOffer(uid, token));
-        model.put("result", ResultDict.SUCCESS.getCode());
-        model.put("user", UserVo.convert(appUser));
+            model.put("result", ResultDict.SUCCESS.getCode());
+            model.put("user", UserVo.convert(appUser));
         } catch (SystemAlgorithmException | ApplicationNotCorrectException
-       e) {
+                e) {
             system.error(e);
             model.put("result", ResultDict.SYSTEM_ERROR.getCode());
         } catch (UserNotFoundException e) {
@@ -281,48 +270,6 @@ public class InfoController extends BaseDecodedController {
         }
         return null;
     }
-
-    private AppUser mapToAppUser(Map<String, Object> map) {
-        AppUser appUser = new AppUser();
-        TpadUser tpadUser = new TpadUser();
-        appUser.setTpadUser(tpadUser);
-        appUser.setId((String) map.get("id"));
-        if (StringUtils.isNotBlank(map.get("icon").toString())) {
-            appUser.setIcon((String) map.get("icon"));
-        }
-        if (StringUtils.isNotBlank(map.get("nickname").toString())) {
-            appUser.setNickname((String) map.get("nickname"));
-        }
-        if (StringUtils.isNotBlank(map.get("birthday").toString())) {
-            appUser.getTpadUser().setBirthday(Integer.valueOf(map.get
-                    ("birthday").toString()));
-        }
-        if (StringUtils.isNotBlank(map.get("birthmonth").toString())) {
-            appUser.getTpadUser().setBirthmonth((Integer) map.get
-                    ("birthmonth"));
-        }
-        if (StringUtils.isNotBlank(map.get("birthyear").toString())) {
-            appUser.getTpadUser().setBirthyear((Integer) map.get("birthyear"));
-        }
-        if (StringUtils.isNotBlank(map.get("login_name").toString())) {
-            appUser.setLoginName(map.get("login_name").toString());
-        }
-        if (StringUtils.isNotBlank(map.get("mobile").toString())) {
-            appUser.getTpadUser().setMobile((String) map.get("mobile"));
-        }
-
-        if (StringUtils.isNotBlank(map.get("prov").toString())) {
-            appUser.getTpadUser().setProv((Integer) map.get("prov"));
-        }
-        if (StringUtils.isNotBlank(map.get("gender").toString())) {
-            appUser.getTpadUser().setGender((Integer) map.get("gender"));
-        }
-        if (StringUtils.isNotBlank(map.get("serialno").toString())) {
-            appUser.setSerialno((String) map.get("serialno"));
-        }
-        return appUser;
-    }
-
     @Autowired
     public void setInfoManager(InfoManager infoManager) {
         this.infoManager = infoManager;
