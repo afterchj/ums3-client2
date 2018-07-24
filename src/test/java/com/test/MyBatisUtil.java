@@ -1,7 +1,6 @@
 package com.test;
 
 import com.model.ThirdLogin;
-import com.uicdao.ThirdLoginDao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.ApplicationContext;

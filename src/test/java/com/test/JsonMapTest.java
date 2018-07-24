@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.model.ThirdLogin;
 import com.model.dd.ResultDict;
-import com.service.ThirdLoginSerive;
 import com.tpadsz.uic.user.api.vo.AppUser;
 import com.tpadsz.uic.user.api.vo.TpadUser;
 import com.utils.Digests;

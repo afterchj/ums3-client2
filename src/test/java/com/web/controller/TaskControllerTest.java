@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.model.ThirdLogin;
 import com.tpadsz.uic.user.api.vo.TpadUser;
-import com.uicdao.ThirdLoginDao;
 import com.utils.Constants;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;

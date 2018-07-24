@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.model.dd.OfferFactory;
 import com.model.dd.ResultDict;
 import com.service.NoticeService;
-import com.service.ThirdLoginSerive;
 import com.tpadsz.ctc.api.UserManager;
 import com.tpadsz.ctc.exception.TaskRepeatException;
 import com.tpadsz.ctc.vo.Present;
@@ -17,7 +16,6 @@ import com.tpadsz.uic.user.api.exception.TokenNotEffectiveException;
 import com.tpadsz.uic.user.api.exception.UserNotFoundException;
 import com.tpadsz.uic.user.api.vo.AppUser;
 import com.tpadsz.uic.user.api.vo.TpadUser;
-import com.uicdao.ThirdLoginDao;
 import com.utils.Constants;
 import com.utils.LoggerUtils;
 import com.web.vo.UserVo;
@@ -29,9 +27,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.annotation.Resource;
-import java.util.Map;
 
 import static com.model.dd.OfferFactory.generateLoginedOffer;
 

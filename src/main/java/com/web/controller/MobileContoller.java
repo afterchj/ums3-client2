@@ -1,13 +1,10 @@
 package com.web.controller;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
-import com.model.DTpadUser;
 import com.model.ThirdLogin;
 import com.model.dd.OfferFactory;
 import com.model.dd.ResultDict;
 import com.service.NoticeService;
-import com.service.ThirdLoginSerive;
 import com.tpadsz.ctc.api.UserManager;
 import com.tpadsz.ctc.exception.TaskRepeatException;
 import com.tpadsz.exception.*;
@@ -17,13 +14,7 @@ import com.tpadsz.uic.user.api.exception.MobileAlreadyExistedException;
 import com.tpadsz.uic.user.api.exception.TokenNotEffectiveException;
 import com.tpadsz.uic.user.api.exception.UserNotFoundException;
 import com.tpadsz.uic.user.api.vo.AppUser;
-import com.tpadsz.uic.user.api.vo.TpadUser;
 import com.utils.Constants;
-import com.utils.Digests;
-import com.utils.Encodes;
-import com.utils.MapUtil;
-import com.utils.convert.DBUtils;
-import com.web.vo.MobileVerifyType;
 import com.web.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Controller("mobileController")
 @RequestMapping("/account/mobile")
