@@ -34,9 +34,6 @@ public class MobileContoller extends BaseDecodedController {
     private UserManager userManager;
     private NoticeService noticeService;
 
-    @Resource
-    private ThirdLoginSerive thirdLoginSerive;
-
     @RequestMapping(value = "/change", method = RequestMethod.POST)
     public String change(@ModelAttribute("decodedParams") JSONObject params,
                          ModelMap model) {
@@ -134,27 +131,6 @@ public class MobileContoller extends BaseDecodedController {
             system.error(e);
             result = ResultDict.SYSTEM_ERROR;
         }
-        model.put("result", result.getCode());
-        return null;
-    }
-
-    @RequestMapping(value = "/thirdLogin", method = RequestMethod.POST)
-    public String ThirdLogin(@ModelAttribute("decodedParams") JSONObject
-                                     params, ModelMap model) {
-        ResultDict result = ResultDict.SUCCESS;
-        String qq = params.getString("qq");
-        String wx = params.getString("wx");
-        String uid = params.getString("uid");
-        ThirdLogin third = new ThirdLogin();
-        third.setId(uid);
-        third.setQq(qq);
-        third.setQq_nickname(params.getString("qq_nickname"));
-        third.setQq_image_url(params.getString("qq_image_url"));
-        third.setWx(wx);
-        third.setWx_nickname(params.getString("wx_nickname"));
-        third.setWx_image_url(params.getString("wx_image_url"));
-        AppUser appUsers = thirdLoginSerive.getUserInfoById(third);
-        model.put("user", UserVo.convert(appUsers));
         model.put("result", result.getCode());
         return null;
     }
