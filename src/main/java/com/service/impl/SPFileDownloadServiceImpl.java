@@ -23,12 +23,12 @@ public class SPFileDownloadServiceImpl implements SPFileDownloadService {
         }
     }
 
-    public void refreshIntoSpFileDownload() {
-        try {
-            spFileDownloadDao.refreshIntoSpFileDownload();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void refreshIntoSpFileDownload() {
+//        try {
+//            spFileDownloadDao.refreshIntoSpFileDownload();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

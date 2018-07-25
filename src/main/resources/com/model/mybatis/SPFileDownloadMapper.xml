@@ -39,10 +39,7 @@
         <if test="count > 0">
             UPDATE mopita.sp_file_download f
             SET f.total_download = total_download + 1
-            WHERE
-            -- f.log_date = #{logDate}
-            -- AND
-            f.file_id = #{fileId}
+            WHERE f.file_id = #{fileId}
         </if>
         <if test="count==0">
             INSERT INTO mopita.sp_file_download (

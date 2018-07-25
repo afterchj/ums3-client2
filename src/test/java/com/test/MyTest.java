@@ -1,16 +1,13 @@
-/*
 package com.test;
 
 import com.utils.PropertiesLoader;
 import org.junit.Test;
-import sun.applet.Main;
 
 import java.util.UUID;
 
-*/
 /**
  * Created by hongjian.chen on 2018/6/12.
- *//*
+ */
 
 public class MyTest {
     private static PropertiesLoader propertiesLoader = PropertiesLoader.getInstance();
@@ -26,4 +23,3 @@ public class MyTest {
         System.out.println(propertiesLoader.getProperty("head.storage"));
     }
 }
-*/

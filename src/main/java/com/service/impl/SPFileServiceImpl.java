@@ -36,10 +36,8 @@ public class SPFileServiceImpl implements SPFileService {
     public List<SPFile> getHottestPage(Integer page) {
         try {
             String edate = DateUtil.format(new Date(), "yyyy-MM-dd");
-            String lastOneWeek = DateUtil.format(
-                    DateUtil.getPerWeekDate(new Date()), "yyyy-MM-dd");
-            String sdate = DateUtil.format(
-                    DateUtil.getPerWeekDate(DateUtil.parse(lastOneWeek, "yyyy-MM-dd")), "yyyy-MM-dd");
+            String lastOneWeek = DateUtil.format(DateUtil.getPerWeekDate(new Date()), "yyyy-MM-dd");
+            String sdate = DateUtil.format(DateUtil.getPerWeekDate(DateUtil.parse(lastOneWeek, "yyyy-MM-dd")), "yyyy-MM-dd");
 //            System.out.println("sdate:" + sdate + ",edate:" + edate);
             return spFileDao.getHottestPage(sdate, edate, (page - 1) * SIZE, SIZE);
         } catch (ParseException e) {
