@@ -38,7 +38,7 @@
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.sp_file_download f
-            SET f.total_download = total_download + 1
+            SET f.total_download = total_download + 1,f.log_date=#{logDate}
             WHERE f.file_id = #{fileId}
         </if>
         <if test="count==0">
