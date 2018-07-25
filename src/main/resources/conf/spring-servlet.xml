@@ -197,8 +197,8 @@
             <mvc:exclude-mapping path="/spfile/hottest/**"/>
             <mvc:exclude-mapping path="/spfile/newest/**"/>
             <mvc:exclude-mapping path="/search/hottest.json"/>
-            <mvc:exclude-mapping path="/spfile/allParentTypes.json"/>
-            <mvc:exclude-mapping path="/spfile/allSubTypes.json"/>
+            <mvc:exclude-mapping path="/spfile/allParentTypes*"/>
+            <mvc:exclude-mapping path="/spfile/allSubTypes*"/>
             <mvc:exclude-mapping path="/spfile/getChildrenTypes/**"/>
             <mvc:exclude-mapping path="/heads/**"/>
             <mvc:exclude-mapping path="/home/getHPFeatured.json"/>
