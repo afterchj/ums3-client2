@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.SPFileDownloadDao">
+
+
     <!--<resultMap type="com.model.SPFileDownload" id="standardSPFileDownloadMap">-->
     <!--<id property="id" column="id" javaType="Integer" jdbcType="INTEGER"/>-->
     <!--<result property="createDate" column="createDate" javaType="Date" jdbcType="TIMESTAMP"/>-->
@@ -11,31 +13,32 @@
     <!--<result property="totalVisit" column="totalVisit" javaType="Integer" jdbcType="INTEGER"/>-->
     <!--</resultMap>-->
 
-    <insert id="refreshIntoSpFileDownload">
-        INSERT INTO mopita.sp_file_download (
-            create_date,
-            log_date,
-            file_id,
-            total_download,
-            total_visit,
-            is_delete
-        ) SELECT
-            NOW() AS create_date,
-            DATE_SUB(curdate(),INTERVAL -1 DAY) AS log_date,
-            f.id AS file_id,
-            0 AS total_download,
-            0 AS total_vistor,
-            0 AS is_delete
-        FROM
-            mopita.sp_file f
-        WHERE
-            f.is_delete = 0;
-    </insert>
+    <!--<insert id="refreshIntoSpFileDownload">-->
+        <!--INSERT INTO mopita.sp_file_download (-->
+            <!--create_date,-->
+            <!--log_date,-->
+            <!--file_id,-->
+            <!--total_download,-->
+            <!--total_visit,-->
+            <!--is_delete-->
+        <!--) SELECT-->
+            <!--NOW() AS create_date,-->
+            <!--DATE_SUB(curdate(),INTERVAL -1 DAY) AS log_date,-->
+            <!--f.id AS file_id,-->
+            <!--0 AS total_download,-->
+            <!--0 AS total_vistor,-->
+            <!--0 AS is_delete-->
+        <!--FROM-->
+            <!--mopita.sp_file f-->
+        <!--WHERE-->
+            <!--f.is_delete = 0;-->
+    <!--</insert>-->
 
     <insert id="updateTotalDownload">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
             SELECT count(*) FROM mopita.sp_file_download t WHERE t.file_id=#{fileId}
         </selectKey>
+
         <if test="count > 0">
             UPDATE mopita.sp_file_download f
             SET f.total_download = total_download + 1,f.log_date=#{logDate}

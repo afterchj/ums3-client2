@@ -8,8 +8,8 @@ import com.tpadsz.exception.NotExecutedDbException;
  */
 public interface LogCountStoreService {
     //更新主题下载量
-//    void updateTotalDown(String themeName, String logDate);
+    void updateTotalDown(String themeName, String logDate);
 
     //更新主题访问量
-//    void updateTotalVisit(String themeName, String logDate);
+    void updateTotalVisit(String themeName, String logDate);
 }

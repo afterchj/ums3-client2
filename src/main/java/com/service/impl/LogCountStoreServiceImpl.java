@@ -21,13 +21,13 @@ public class LogCountStoreServiceImpl implements LogCountStoreService {
      * @param themeName
      * @param logDate
      */
-//    public void updateTotalDown(String themeName, String logDate) {
-//        try {
-//            dLogCountStoreDao.updateTotalDown(themeName, logDate);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void updateTotalDown(String themeName, String logDate) {
+        try {
+            dLogCountStoreDao.updateTotalDown(themeName, logDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 更新主题访问量
@@ -35,21 +35,20 @@ public class LogCountStoreServiceImpl implements LogCountStoreService {
      * @param themeName
      * @param logDate
      */
-//    public void updateTotalVisit(String themeName, String logDate) {
-//        try {
-//            dLogCountStoreDao.updateTotalVisit(themeName, logDate);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    //每天22点将主题数据刷新数据进入log_count_store表
-    public void refreshIntoLogCountStore() {
+    public void updateTotalVisit(String themeName, String logDate) {
         try {
-            dLogCountStoreDao.refreshIntoLogCountStore();
-//            System.out.println("新增数据成功");
+            dLogCountStoreDao.updateTotalVisit(themeName, logDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+//       每天22点将主题数据刷新数据进入log_count_store表
+//    public void refreshIntoLogCountStore() {
+//        try {
+//            dLogCountStoreDao.refreshIntoLogCountStore();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

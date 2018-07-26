@@ -6,7 +6,7 @@ package com.service;
  */
 public interface SPFileDownloadService {
     //更新主题下载量
-    void updateTotalDown(Integer fileId, String logDate);
+    void updateTotalDown(Integer fileId, String logDate)throws Exception;
 
 //    void refreshIntoSpFileDownload();
 }

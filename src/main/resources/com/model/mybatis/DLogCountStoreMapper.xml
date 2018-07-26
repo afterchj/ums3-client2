@@ -11,37 +11,14 @@
         <result property="totalVisit" column="totalVisit" javaType="Integer" jdbcType="INTEGER"/>
     </resultMap>
 
-    <insert id="refreshIntoLogCountStore">
-        INSERT INTO mopita.log_count_store (
-            create_date,
-            log_date,
-            theme_name,
-            total_down,
-            total_visit,
-            is_delete
-        ) SELECT
-            NOW() AS create_date,
-            DATE_SUB(curdate(),INTERVAL -1 DAY) AS log_date,
-            f.title AS theme_name,
-            0 AS total_down,
-            0 AS total_vistor,
-            0 AS is_delete
-        FROM
-            mopita.f_file f
-        WHERE
-            f.is_delete = 0;
-    </insert>
-
     <insert id="updateTotalDown" parameterType="String">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            SELECT count(*) FROM mopita.log_count_store t WHERE t.theme_name=#{themeName} AND t.log_date=#{logDate}
+            SELECT count(*) FROM mopita.log_count_store t WHERE t.theme_name=#{themeName}
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.log_count_store t
             SET t.total_down = total_down + 1
-            WHERE
-            t.log_date = #{logDate}
-            AND t.theme_name = #{themeName}
+            WHERE t.theme_name = #{themeName}
         </if>
         <if test="count==0">
             INSERT INTO mopita.log_count_store (
@@ -59,14 +36,12 @@
 
     <insert id="updateTotalVisit" parameterType="String">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
-            SELECT count(*) FROM mopita.log_count_store t WHERE t.theme_name=#{themeName} AND t.log_date=#{logDate}
+            SELECT count(*) FROM mopita.log_count_store t WHERE t.theme_name=#{themeName}
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.log_count_store t
             SET t.total_visit = total_visit + 1
-            WHERE
-            t.log_date = #{logDate}
-            AND t.theme_name = #{themeName}
+            WHERE t.theme_name = #{themeName}
         </if>
         <if test="count==0">
             INSERT INTO mopita.log_count_store (
@@ -82,5 +57,25 @@
         </if>
     </insert>
 
+    <insert id="refreshIntoLogCountStore">
+        INSERT INTO mopita.log_count_store (
+        create_date,
+        log_date,
+        theme_name,
+        total_down,
+        total_visit,
+        is_delete
+        ) SELECT
+        NOW() AS create_date,
+        DATE_SUB(curdate(),INTERVAL -1 DAY) AS log_date,
+        f.title AS theme_name,
+        0 AS total_down,
+        0 AS total_vistor,
+        0 AS is_delete
+        FROM
+        mopita.f_file f
+        WHERE
+        f.is_delete = 0;
+    </insert>
 
 </mapper>
