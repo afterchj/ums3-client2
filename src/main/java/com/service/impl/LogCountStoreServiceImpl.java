@@ -2,7 +2,6 @@ package com.service.impl;
 
 import com.dao.DLogCountStoreDao;
 import com.service.LogCountStoreService;
-import com.tpadsz.exception.NotExecutedDbException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,7 +24,7 @@ public class LogCountStoreServiceImpl implements LogCountStoreService {
         try {
             dLogCountStoreDao.updateTotalDown(themeName, logDate);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.print(e.getCause());
         }
     }
 
@@ -39,7 +38,7 @@ public class LogCountStoreServiceImpl implements LogCountStoreService {
         try {
             dLogCountStoreDao.updateTotalVisit(themeName, logDate);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.print(e.getCause());
         }
     }
 
