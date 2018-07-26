@@ -189,6 +189,10 @@
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <bean class="com.web.interceptor.MonitoringInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/"/>
             <mvc:exclude-mapping path="/public/**"/>
             <mvc:exclude-mapping path="/app/**"/>
