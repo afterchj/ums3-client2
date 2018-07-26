@@ -258,7 +258,7 @@
         </property>
     </bean>
 
-	<!--<beans profile="production">-->
+	<beans profile="production">
 	<bean id="jedisConnFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:poolConfig-ref="JedisPoolConfig" p:hostName="${redis.url}" p:port="6379"
@@ -307,7 +307,7 @@
 			<property name="removeAbandoned" value="true" />
 			<property name="removeAbandonedTimeout" value="60" />
 		</bean>
-	<!--</beans>-->
+	</beans>
 
 	<!--<beans profile="development">
 	<bean id="jedisConnFactory"

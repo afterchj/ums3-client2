@@ -1,9 +1,15 @@
 package com.web.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.model.dd.DataDict;
+import com.service.AdvertisementService;
+import com.service.CountService;
+import com.service.FileStoreInfoService;
+import com.service.TopicService;
+import com.utils.FrontDisplayUtils;
+import com.web.vo.FrontThemeFileVo;
+import com.web.vo.TopicVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.TypeMismatchException;
@@ -15,16 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.model.dd.DataDict;
-import com.service.AdvertisementService;
-import com.service.CountService;
-import com.service.FileStoreInfoService;
-import com.service.TopicService;
-import com.utils.FrontDisplayUtils;
-import com.web.vo.FrontThemeFileVo;
-import com.web.vo.TopicVo;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller("topicController")
 @RequestMapping("/app")

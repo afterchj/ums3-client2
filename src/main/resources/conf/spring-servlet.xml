@@ -187,6 +187,11 @@
 
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <!--监控性能 不会被拦截-->
+        <!--<mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.web.interceptor.MonitoringInterceptor"/>
+        </mvc:interceptor>-->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/"/>
