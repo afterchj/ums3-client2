@@ -17,7 +17,7 @@
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.log_count_store t
-            SET t.total_down = total_down + 1
+            SET t.total_down = total_down + 1,t.log_date=#{logDate}
             WHERE t.theme_name = #{themeName}
         </if>
         <if test="count==0">
@@ -40,7 +40,7 @@
         </selectKey>
         <if test="count > 0">
             UPDATE mopita.log_count_store t
-            SET t.total_visit = total_visit + 1
+            SET t.total_visit = total_visit + 1,t.log_date=#{logDate}
             WHERE t.theme_name = #{themeName}
         </if>
         <if test="count==0">
