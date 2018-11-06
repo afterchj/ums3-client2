@@ -209,25 +209,25 @@
             <mvc:exclude-mapping path="/home/getHPFeatured.json"/>
             <bean class="com.web.interceptor.ParamsEncryptInterceptor"/>
         </mvc:interceptor>
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--<mvc:exclude-mapping path="/"/>-->
-            <!--<mvc:exclude-mapping path="/public/**"/>-->
-            <!--<mvc:exclude-mapping path="/account/**"/>-->
-            <!--<mvc:exclude-mapping path="/app/**"/>-->
-            <!--<mvc:exclude-mapping path="/goods/**"/>-->
-            <!--<mvc:exclude-mapping path="/redirect/**"/>-->
-            <!--<mvc:exclude-mapping path="/update/**"/>-->
-            <!--<mvc:exclude-mapping path="/account/pwd/retrieve"/>-->
-            <!--<mvc:exclude-mapping path="/zone/work/square"/>-->
-            <!--<mvc:exclude-mapping path="/zone/work/square/**"/>-->
-            <!--<mvc:exclude-mapping path="/logCountStore/**"/>-->
-            <!--<mvc:exclude-mapping path="/spfile/**"/>-->
-            <!--<mvc:exclude-mapping path="/sptopic/**"/>-->
-            <!--<mvc:exclude-mapping path="/home/**"/>-->
-            <!--<mvc:exclude-mapping path="/heads/**"/>-->
-            <!--<bean class="com.web.interceptor.UserTokenValidationInterceptor"/>-->
-        <!--</mvc:interceptor>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/public/**"/>
+            <mvc:exclude-mapping path="/account/**"/>
+            <mvc:exclude-mapping path="/app/**"/>
+            <mvc:exclude-mapping path="/goods/**"/>
+            <mvc:exclude-mapping path="/redirect/**"/>
+            <mvc:exclude-mapping path="/update/**"/>
+            <mvc:exclude-mapping path="/account/pwd/retrieve"/>
+            <mvc:exclude-mapping path="/zone/work/square"/>
+            <mvc:exclude-mapping path="/zone/work/square/**"/>
+            <mvc:exclude-mapping path="/logCountStore/**"/>
+            <mvc:exclude-mapping path="/spfile/**"/>
+            <mvc:exclude-mapping path="/sptopic/**"/>
+            <mvc:exclude-mapping path="/home/**"/>
+            <mvc:exclude-mapping path="/heads/**"/>
+            <bean class="com.web.interceptor.UserTokenValidationInterceptor"/>
+        </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/app/**"/>
             <bean class="org.springframework.web.servlet.mvc.WebContentInterceptor"
@@ -254,12 +254,10 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-
     <!-- 静态资源映射 -->
     <mvc:default-servlet-handler/>
     <!-- <bean id="rpe" class="com.baobaotao.web.ResourcePathExposer" init-method="init"
         /> -->
-    <mvc:resources mapping="/public/**" location="/#{rpe.resourceRoot}/"
-                   cache-period="31536000"/>
+    <mvc:resources mapping="/public/**" location="/#{rpe.resourceRoot}/" cache-period="31536000"/>
 
 </beans>
