@@ -256,8 +256,7 @@
 
     <!-- 静态资源映射 -->
     <mvc:default-servlet-handler/>
-    <!-- <bean id="rpe" class="com.baobaotao.web.ResourcePathExposer" init-method="init"
-        /> -->
+    <!-- <bean id="rpe" class="com.baobaotao.web.ResourcePathExposer" init-method="init"/> -->
     <mvc:resources mapping="/public/**" location="/#{rpe.resourceRoot}/" cache-period="31536000"/>
 
 </beans>
